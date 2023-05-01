@@ -1,7 +1,6 @@
 import { RPC_PROVIDERS } from "@/constants/networks";
 import { useFetchGasData } from "@/hooks/provider/useGas";
 import { useGetLatestBlock } from "@/hooks/provider/useGetLatestBlock";
-import { useWeb3React } from "@web3-react/core";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../_hooks";
 import { setGasData, setLatestBlock, setProvider } from "./providerSlice";
