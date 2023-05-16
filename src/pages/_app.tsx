@@ -1,58 +1,92 @@
-import useOrderedConnections from "@/hooks/wallet/useOrderedConnections";
-import { useAppSelector } from "@/store/_hooks";
-import { Connection, getConnectionName } from "@/wallet";
-import { Web3ReactHooks, Web3ReactProvider } from "@web3-react/core";
-import { Connector } from "@web3-react/types";
-import type { AppProps } from "next/app";
-import { ReactNode, useMemo } from "react";
-import { Provider } from "react-redux";
-import store from "../store/_store";
-import GeneralUpdater from "../store/general/generalUpdater";
-import ProviderUpdater from "../store/provider/providerUpdater";
-import NetworkUpdater from "../store/network/networkUpdater";
-import WalletUpdater from "../store/wallet/walletUpdater";
+import { useAppSelector } from '@/store/_hooks'
+import type { AppProps } from 'next/app'
+import { ReactNode, useMemo } from 'react'
+import { Provider } from 'react-redux'
+import store from '../store/_store'
+import GeneralUpdater from '../store/general/generalUpdater'
+import ProviderUpdater from '../store/provider/providerUpdater'
+import ToastUpdater from '../store/toast/toastUpdater'
 
-export function Web3Provider({ children }: { children: ReactNode }) {
-  const selectedProvider = useAppSelector(
-    (state) => state.general.selectedProvider
-  );
-
-  const connections = useOrderedConnections(selectedProvider);
-  const connectors: [Connector, Web3ReactHooks][] = connections.map(
-    ({ hooks, connector }) => [connector, hooks]
-  );
-  const key = useMemo(
-    () =>
-      connections
-        .map(({ type }: Connection) => getConnectionName(type))
-        .join("-"),
-    [connections]
-  );
-  return (
-    <Web3ReactProvider connectors={connectors} key={key}>
-      {children}
-    </Web3ReactProvider>
-  );
-}
+import { WagmiConfig, configureChains, createConfig } from 'wagmi'
+import { Goerli, Aurora, Mainnet, Fantom, Polygon } from '@/constants/networks'
+// import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import { InjectedConnector } from 'wagmi/connectors/injected'
+import { LedgerConnector } from 'wagmi/connectors/ledger'
+import { publicProvider } from 'wagmi/providers/public'
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
+import {
+  ALCHEMY_ETHEREUM_API_KEY,
+  ALCHEMY_GOERLI_API_KEY,
+  ALCHEMY_POLYGON_API_KEY,
+} from '@/constants'
+import { ThemeProvider } from 'styled-components'
+import { GlobalStyle } from '@/components/atoms/Layout'
+import { ToastContainer } from 'react-toastify'
+import { lightTheme, darkTheme } from '../styles/themes'
 
 function Updaters() {
   return (
     <>
       <GeneralUpdater />
       <ProviderUpdater />
-      <NetworkUpdater />
-      <WalletUpdater />
+      <ToastUpdater />
     </>
-  );
+  )
 }
 
 export default function App({ Component, pageProps }: AppProps) {
+  const { chains, publicClient, webSocketPublicClient } = configureChains(
+    [Goerli, Aurora, Mainnet, Fantom, Polygon],
+    [
+      alchemyProvider({ apiKey: String(ALCHEMY_ETHEREUM_API_KEY) }),
+      alchemyProvider({ apiKey: String(ALCHEMY_POLYGON_API_KEY) }),
+      alchemyProvider({ apiKey: String(ALCHEMY_GOERLI_API_KEY) }),
+      jsonRpcProvider({ rpc: (chain) => ({ http: 'https://rpc.ftm.tools/' }) }),
+      jsonRpcProvider({
+        rpc: (chain) => ({ http: 'https://mainnet.aurora.dev' }),
+      }),
+      publicProvider(),
+    ]
+  )
+
+  const wagmiConfig = createConfig({
+    autoConnect: true,
+    publicClient,
+    webSocketPublicClient,
+    connectors: [
+      new InjectedConnector({ chains }),
+      new MetaMaskConnector({ chains }),
+      // new WalletConnectConnector({
+      //   chains,
+      //   options: {
+      //     projectId: '...',
+      //   },
+      // }),
+      new LedgerConnector({ chains }),
+      new CoinbaseWalletConnector({ chains, options: { appName: 'wagmi.sh' } }),
+    ],
+  })
+
   return (
     <Provider store={store}>
-      <Web3Provider>
-        <Updaters />
-        <Component {...pageProps} />
-      </Web3Provider>
+      <WagmiConfig config={wagmiConfig}>
+        <StyledThemeProvider>
+          <GlobalStyle />
+          <ToastContainer />
+          <Updaters />
+          <Component {...pageProps} />
+        </StyledThemeProvider>
+      </WagmiConfig>
     </Provider>
-  );
+  )
+}
+
+function StyledThemeProvider({ children }: { children: ReactNode }) {
+  const appTheme = useAppSelector((state) => state.general.appTheme)
+  const theme = appTheme == 'light' ? lightTheme : darkTheme
+
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>
 }

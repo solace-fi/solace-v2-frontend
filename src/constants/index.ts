@@ -1,23 +1,22 @@
-import { constants } from 'ethers'
+import { toast } from 'react-toastify'
 
-export const ALCHEMY_ETHEREUM_API_KEY = process.env.REACT_APP_ALCHEMY_ETHEREUM_API_KEY
-export const ALCHEMY_POLYGON_API_KEY = process.env.REACT_APP_ALCHEMY_POLYGON_API_KEY
-export const ALCHEMY_GOERLI_API_KEY = process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY
-export const THEGRAPH_API_KEY = process.env.REACT_APP_THEGRAPH_API_KEY
-export const POLYGONSCAN_API_KEY = process.env.REACT_APP_POLYGONSCAN_API_KEY
-export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY
-export const AURORASCAN_API_KEY = process.env.REACT_APP_AURORASCAN_API_KEY
-export const FTMSCAN_API_KEY = process.env.REACT_APP_FTMSCAN_API_KEY
+export const ALCHEMY_ETHEREUM_API_KEY =
+  process.env.NEXT_PUBLIC_ALCHEMY_ETHEREUM_API_KEY
+export const ALCHEMY_POLYGON_API_KEY =
+  process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_API_KEY
+export const ALCHEMY_GOERLI_API_KEY =
+  process.env.NEXT_PUBLIC_ALCHEMY_GOERLI_API_KEY
+export const THEGRAPH_API_KEY = process.env.NEXT_PUBLIC_THEGRAPH_API_KEY
+export const POLYGONSCAN_API_KEY = process.env.NEXT_PUBLIC_POLYGONSCAN_API_KEY
+export const ETHERSCAN_API_KEY = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
+export const AURORASCAN_API_KEY = process.env.NEXT_PUBLIC_AURORASCAN_API_KEY
+export const FTMSCAN_API_KEY = process.env.NEXT_PUBLIC_FTMSCAN_API_KEY
 
 export const NUM_SECONDS_PER_DAY = 86400
 export const NUM_BLOCKS_PER_DAY = 6450
 export const NUM_DAYS_PER_MONTH = 30
 export const DAYS_PER_YEAR = 365
-export const DEADLINE = constants.MaxUint256
-export const MAX_APPROVAL_AMOUNT = constants.MaxUint256
 
-export const ZERO = constants.Zero
-export const ADDRESS_ZERO = constants.AddressZero
 export const GAS_LIMIT = 800000
 export const MAX_WIDTH = 1340 // max width that the app can expand up to
 
@@ -51,3 +50,53 @@ export const MAX_BPS = 10000
 export const POLLING_INTERVAL = 12000
 
 export const WALLET_CONNECT_BRIDGE = 'https://bridge.walletconnect.org'
+
+export const txSuccess = {
+  autoClose: 10000,
+  type: toast.TYPE.SUCCESS,
+  position: toast.POSITION.BOTTOM_RIGHT,
+  closeOnClick: false,
+  closeButton: true,
+  className: 'success-toast',
+  isLoading: false,
+}
+
+export const txWarn = {
+  autoClose: 10000,
+  type: toast.TYPE.WARNING,
+  position: toast.POSITION.BOTTOM_RIGHT,
+  closeOnClick: false,
+  closeButton: true,
+  className: 'warn-toast',
+  isLoading: false,
+}
+
+export const txError = {
+  autoClose: 10000,
+  type: toast.TYPE.ERROR,
+  position: toast.POSITION.BOTTOM_RIGHT,
+  closeOnClick: false,
+  closeButton: true,
+  className: 'error-toast',
+  isLoading: false,
+}
+
+export const appNotice = {
+  type: toast.TYPE.INFO,
+  position: toast.POSITION.BOTTOM_RIGHT,
+  autoClose: false,
+  closeOnClick: false,
+  closeButton: true,
+  className: 'info-toast',
+  isLoading: false,
+}
+
+export const appError = {
+  type: toast.TYPE.ERROR,
+  position: toast.POSITION.BOTTOM_RIGHT,
+  autoClose: false,
+  closeOnClick: false,
+  closeButton: true,
+  className: 'error-toast',
+  isLoading: false,
+}

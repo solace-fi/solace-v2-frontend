@@ -1,5 +1,3 @@
-import { BigNumber } from 'ethers'
-
 export type ReadTokenData = {
   constants: { name: string; symbol: string; decimals: number }
   address: { [chainId: number]: string }
@@ -14,10 +12,10 @@ export type ReadToken = {
 }
 
 export type TokenInfo = ReadToken & {
-  balance: BigNumber
+  balance: bigint
   price: number
 }
 
 export type PoolTokenInfo = TokenInfo & {
-  poolBalance: BigNumber
+  poolBalance: bigint
 }

@@ -1,6 +1,6 @@
 import { TransactionCondition, Error } from '../enums'
 
-export type BlockData = { blockNumber?: number; blockTimestamp?: number }
+export type BlockData = { blockNumber?: bigint; blockTimestamp?: number }
 
 export type LocalTx = {
   hash: any
