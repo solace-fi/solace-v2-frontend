@@ -28,7 +28,9 @@ interface CopyProps extends DOMAttributes<HTMLButtonElement> {
   objectName?: string
 }
 
-export const CopyButton: React.FC<CopyProps & ButtonProps & GeneralProps> = (props) => {
+export const CopyButton: React.FC<CopyProps & ButtonProps & GeneralProps> = (
+  props
+) => {
   /*
 
   hooks

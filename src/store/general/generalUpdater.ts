@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import { useAppDispatch } from "../_hooks";
-import { incrementMinute } from "./generalSlice";
+import { useEffect } from 'react'
+import { useAppDispatch } from '../_hooks'
+import { incrementMinute } from './generalSlice'
 
 export default function Updater() {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     const interval = setInterval(() => {
-      dispatch(incrementMinute());
-    }, 60000);
-    return () => clearInterval(interval);
-  }, [dispatch]);
+      dispatch(incrementMinute())
+    }, 60000)
+    return () => clearInterval(interval)
+  }, [dispatch])
 
-  return null;
+  return null
 }

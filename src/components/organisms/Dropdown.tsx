@@ -15,6 +15,7 @@ import { Card } from '../atoms/Card'
 import { useWindowDimensions } from '../../hooks/internal/useWindowDimensions'
 import { useAppSelector } from '@/store/_hooks'
 import { formatUnits } from 'viem'
+import Image from 'next/image'
 
 export const GenericInputSection = ({
   hasArrow,
@@ -243,7 +244,7 @@ export const DropdownOptions = ({
             <Flex stretch gap={12}>
               <Flex gap={8} itemsCenter>
                 {item.iconUrl ? (
-                  <img src={item.iconUrl} height={24} />
+                  <Image src={item.iconUrl} height={24} alt={item.iconUrl} />
                 ) : (
                   <Tdiv {...gradientStyle}>{item.label}</Tdiv>
                 )}
@@ -311,10 +312,11 @@ export const BalanceDropdownOptions = ({
           >
             <Flex stretch between pl={16} pr={16}>
               <Flex gap={8} itemsCenter>
-                <img
+                <Image
                   src={`https://assets.solace.fi/${item.name.toLowerCase()}`}
                   width={16}
                   height={16}
+                  alt={item.name}
                 />
                 <Tdiv {...gradientStyle}>{item.symbol}</Tdiv>
               </Flex>

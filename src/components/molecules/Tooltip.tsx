@@ -111,12 +111,10 @@ export function StyledTooltip({
           {disabled ? (
             children
           ) : (
-            <div>
-              <a data-tooltip-id={id} data-tooltip-content={tip}>
-                {children}
-              </a>
-              <CustomTooltip id={id}>
-                {localLink ? (
+            <>
+              <a data-tooltip-id={id}>{children}</a>
+              {localLink ? (
+                <CustomTooltip id={id} clickable>
                   <HyperLink
                     href={localLink}
                     target="_blank"
@@ -131,13 +129,15 @@ export function StyledTooltip({
                       Learn more <StyledLinkExternal size={20} />
                     </Tdiv>
                   </HyperLink>
-                ) : (
+                </CustomTooltip>
+              ) : (
+                <CustomTooltip id={id}>
                   <Tdiv t4 primary>
                     {tip}
                   </Tdiv>
-                )}
-              </CustomTooltip>
-            </div>
+                </CustomTooltip>
+              )}
+            </>
           )}
         </div>
       ) : showChildren ? (

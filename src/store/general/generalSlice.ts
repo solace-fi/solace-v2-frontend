@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { getDarkMode, setDarkMode } from '../darkMode'
 
 type InitialState = {
   selectedProvider: string | null
@@ -25,8 +26,9 @@ const generalSlice = createSlice({
     setSelectedProvider: (state, action: PayloadAction<string | null>) => {
       state.selectedProvider = action.payload
     },
-    toggleTheme: (state) => {
-      state.appTheme = state.appTheme === 'light' ? 'dark' : 'light'
+    toggleDarkTheme: (state, action: PayloadAction<boolean>) => {
+      setDarkMode(action.payload)
+      state.appTheme = action.payload ? 'dark' : 'light'
     },
     setPathName: (state, action: PayloadAction<string>) => {
       state.pathname = action.payload
@@ -46,7 +48,7 @@ const generalSlice = createSlice({
 export default generalSlice.reducer
 export const {
   setSelectedProvider,
-  toggleTheme,
+  toggleDarkTheme,
   setPathName,
   incrementNegativeVersion,
   incrementPositiveVersion,

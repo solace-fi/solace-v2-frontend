@@ -20,9 +20,10 @@ import { WalletList } from '../molecules/WalletList'
 import { RecentActivityTable } from './RecentActivityTable'
 import { useAccount, useDisconnect, useEnsName, useNetwork } from 'wagmi'
 import { useAppDispatch, useAppSelector } from '@/store/_hooks'
-import { toggleTheme } from '@/store/general/generalSlice'
+import { toggleDarkTheme } from '@/store/general/generalSlice'
 import { ExplorerscanApi } from '@/constants/enums'
 import { HyperLink } from '../atoms/Link'
+import Image from 'next/image'
 
 export function AccountPopupPanel(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -73,7 +74,12 @@ export function AccountPopupPanel(): JSX.Element {
               {account && (
                 <Flex itemsCenter gap={5} mb={20} justifyCenter>
                   <UserImage width={25} height={25}>
-                    <img src={makeBlockie(account)} alt={'account'} />
+                    <Image
+                      src={makeBlockie(account)}
+                      alt={'account'}
+                      width={25}
+                      height={25}
+                    />
                   </UserImage>
                   <Tdiv t4 semibold>
                     {name ?? shortenAddress(account)}
@@ -197,7 +203,7 @@ export function AccountPopupPanel(): JSX.Element {
               <Flex justifyCenter mt={20}>
                 <Button
                   outlined={appTheme == 'light'}
-                  onClick={() => dispatch(toggleTheme())}
+                  onClick={() => dispatch(toggleDarkTheme(appTheme == 'light'))}
                   white
                   onMouseEnter={() => setShowThemeTip(true)}
                   onMouseLeave={() => setShowThemeTip(false)}
@@ -271,7 +277,12 @@ export function AccountPopupPanelMobile(): JSX.Element {
               {account && (
                 <Flex itemsCenter gap={5} mb={20} justifyCenter>
                   <UserImage width={25} height={25}>
-                    <img src={makeBlockie(account)} alt={'account'} />
+                    <Image
+                      src={makeBlockie(account)}
+                      alt={'account'}
+                      width={25}
+                      height={25}
+                    />
                   </UserImage>
                   <Tdiv t4 semibold>
                     {name ?? shortenAddress(account)}
@@ -395,7 +406,7 @@ export function AccountPopupPanelMobile(): JSX.Element {
               <Flex justifyCenter mt={20}>
                 <Button
                   outlined={appTheme == 'light'}
-                  onClick={() => dispatch(toggleTheme())}
+                  onClick={() => dispatch(toggleDarkTheme(appTheme != 'light'))}
                   white
                   onMouseEnter={() => setShowThemeTip(true)}
                   onMouseLeave={() => setShowThemeTip(false)}

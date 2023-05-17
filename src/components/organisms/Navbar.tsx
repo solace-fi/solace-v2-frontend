@@ -18,7 +18,7 @@ import { AccountPopupPanel, AccountPopupPanelMobile } from './AccountPopupPanel'
 import { useOnClickOutside } from '../../hooks/internal/useOnClickOutside'
 import { NetworkPopupPanel, NetworkPopupPanelMobile } from './NetworkPopupNanel'
 import { useAppDispatch, useAppSelector } from '@/store/_hooks'
-import { toggleTheme } from '@/store/general/generalSlice'
+import { toggleDarkTheme } from '@/store/general/generalSlice'
 import { useAccount, useEnsName, useNetwork } from 'wagmi'
 import { useDispatch } from 'react-redux'
 import { setShowAccount, setShowNetworks } from '@/store/ui/uiSlice'
@@ -26,6 +26,7 @@ import { Mainnet, NETWORKS } from '@/constants/networks'
 import { StyledNavLink } from '../atoms/Link'
 import { useRouter } from 'next/router'
 import makeBlockie from 'ethereum-blockies-base64'
+import Image from 'next/image'
 
 export function MobileNavPanel(
   props: PropsWithChildren & {
@@ -76,7 +77,9 @@ export function MobileNavPanel(
           <Flex center gap={20}>
             <Button
               nohover
-              onClick={appTheme == 'dark' ? toggleTheme : undefined}
+              onClick={() =>
+                appTheme == 'dark' ? toggleDarkTheme(false) : undefined
+              }
               style={{ minWidth: '0', minHeight: '0' }}
               p={10}
             >
@@ -85,7 +88,9 @@ export function MobileNavPanel(
             <VerticalSeparator />
             <Button
               nohover
-              onClick={appTheme == 'light' ? toggleTheme : undefined}
+              onClick={() =>
+                appTheme == 'light' ? toggleDarkTheme(true) : undefined
+              }
               style={{ minWidth: '0', minHeight: '0' }}
               p={10}
             >
@@ -145,7 +150,12 @@ export function MobileNavbar(
               onClick={() => dispatch(setShowNetworks(!showNetworks))}
             >
               {localChain.logo && (
-                <img src={localChain.logo} width={30} height={30} />
+                <Image
+                  src={localChain.logo}
+                  width={30}
+                  height={30}
+                  alt={localChain.name}
+                />
               )}
             </Button>
           </span>
@@ -158,10 +168,20 @@ export function MobileNavbar(
             >
               {account ? (
                 <UserImage width={35} height={35} style={{ margin: 'auto' }}>
-                  <img src={makeBlockie(account)} alt={'account'} />
+                  <Image
+                    src={makeBlockie(account)}
+                    alt={'account'}
+                    width={35}
+                    height={35}
+                  />
                 </UserImage>
               ) : (
-                <img src={UnconnectedUser} />
+                <Image
+                  src={UnconnectedUser}
+                  alt={'unconnected user'}
+                  width={35}
+                  height={35}
+                />
               )}
             </Button>
           </span>
@@ -253,11 +273,12 @@ export function FullNavbar(
               onClick={() => dispatch(setShowNetworks(!showNetworks))}
             >
               <Flex>
-                <img
+                <Image
                   src={localChain.logo}
                   width={30}
                   height={30}
                   style={{ marginRight: '2px' }}
+                  alt={localChain.name}
                 />
                 <Tdiv nowrap autoAlignVertical>
                   {localChain.name}
@@ -276,10 +297,20 @@ export function FullNavbar(
               <Flex between gap={5} itemsCenter>
                 {localAccount ? (
                   <UserImage width={30} height={30} style={{ margin: 'auto' }}>
-                    <img src={makeBlockie(localAccount)} alt={'account'} />
+                    <Image
+                      src={makeBlockie(localAccount)}
+                      alt={'account'}
+                      width={30}
+                      height={30}
+                    />
                   </UserImage>
                 ) : (
-                  <img src={UnconnectedUser} />
+                  <Image
+                    src={UnconnectedUser}
+                    alt={'unconnected user'}
+                    width={30}
+                    height={30}
+                  />
                 )}
                 {scrollPosition <= 40 &&
                   (localAccount ? (

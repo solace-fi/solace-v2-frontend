@@ -98,7 +98,8 @@ export const ButtonAppearanceCss = css<ButtonProps & GeneralProps>`
   cursor: pointer;
   visibility: ${(props) => (props.hidden ? 'hidden;' : 'visible;')};
 
-  ${(props) => props.outlined && `border: 1px solid ${props.theme.backgroundOutline}}`}
+  ${(props) =>
+    props.outlined && `border: 1px solid ${props.theme.backgroundOutline}}`}
   ${(props) => ButtonColorFunc(props, props.theme)}
 
   font-family: 'Open Sans', sans-serif;

@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/store/_hooks'
 import type { AppProps } from 'next/app'
-import { ReactNode, useMemo } from 'react'
+import { ReactNode, useEffect, useMemo } from 'react'
 import { Provider } from 'react-redux'
 import store from '../store/_store'
 import GeneralUpdater from '../store/general/generalUpdater'
@@ -27,8 +27,19 @@ import { ToastContainer } from 'react-toastify'
 import { lightTheme, darkTheme } from '../styles/themes'
 import { RouteInfo } from '@/constants/types'
 import { Navbar } from '@/components/organisms/Navbar'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+
+import { getDarkMode } from '../store/darkMode'
+import { toggleDarkTheme } from '../store/general/generalSlice'
+import { useAppDispatch } from '../store/_hooks'
+import { setShowApp } from '@/store/ui/uiSlice'
+import Image from 'next/image'
+import Spinner from '../assets/svg/colored_spinner.svg'
+
 import '../styles/index.css'
+import 'react-toastify/dist/ReactToastify.css'
+import '../styles/toast.css'
+import { Flex } from '@/components/atoms/Flex'
 
 function Updaters() {
   return (
@@ -94,25 +105,62 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <WagmiConfig config={wagmiConfig}>
-        <StyledThemeProvider>
-          <Updaters />
-          <Navbar routeInfoArr={routeInfoArr} />
-          <Layout>
-            <AnimatePresence mode="wait" initial={false}>
-              <GlobalStyle key={'_globalStyle'} />
-              <Component {...pageProps} />
-              <ToastContainer key={'_toastContainer'} />
-            </AnimatePresence>
-          </Layout>
-        </StyledThemeProvider>
+        <Updaters />
+        <DarkModeProvider>
+          <StyledThemeProvider>
+            <Navbar routeInfoArr={routeInfoArr} />
+            <Layout>
+              <AnimatePresence mode="wait" initial={false}>
+                <GlobalStyle key={'_globalStyle'} />
+                <Component {...pageProps} />
+              </AnimatePresence>
+              <ToastContainer />
+            </Layout>
+          </StyledThemeProvider>
+        </DarkModeProvider>
       </WagmiConfig>
     </Provider>
   )
+}
+
+function DarkModeProvider({ children }: { children: ReactNode }) {
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(toggleDarkTheme(getDarkMode()))
+    const app = setTimeout(() => {
+      dispatch(setShowApp(true))
+    }, 1000)
+
+    return () => {
+      clearTimeout(app)
+    }
+  }, [])
+
+  return <>{children}</>
 }
 
 function StyledThemeProvider({ children }: { children: ReactNode }) {
   const appTheme = useAppSelector((state) => state.general.appTheme)
   const theme = appTheme == 'light' ? lightTheme : darkTheme
 
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>
+  const showApp = useAppSelector((state) => state.ui.showApp)
+
+  return (
+    <ThemeProvider theme={theme}>
+      {showApp ? (
+        children
+      ) : (
+        <Flex
+          itemsCenter
+          justifyCenter
+          style={{ height: '100vh', width: '100%', backgroundColor: '#000' }}
+        >
+          <div style={{ width: '200px', height: '200px' }}>
+            <Image src={Spinner} alt={'loading'} width={200} height={200} />
+          </div>
+        </Flex>
+      )}
+    </ThemeProvider>
+  )
 }

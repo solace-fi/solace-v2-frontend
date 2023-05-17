@@ -32,6 +32,8 @@ import { CopyButton } from './CopyButton'
 import { getExplorerItemUrl } from '../../utils/explorer'
 import { useNetwork } from 'wagmi'
 import { HyperLink } from '../atoms/Link'
+import useCopyClipboard from '@/hooks/internal/useCopyToClipboard'
+import { StyledCheckmark, StyledCopy } from '../atoms/Icon'
 
 interface AppToastProps {
   message: string
@@ -60,6 +62,7 @@ export const TransactionToast: React.FC<TransactionToastProps> = ({
   errObj,
 }) => {
   const { chain } = useNetwork()
+  const [isCopied, setCopied] = useCopyClipboard()
 
   const [explorerUrl, setExplorerUrl] = React.useState('')
   const [explorerName, setExplorerName] = React.useState('')
@@ -132,24 +135,36 @@ export const TransactionToast: React.FC<TransactionToastProps> = ({
             </HyperLink>
           )}
           {errObj && (
-            <CopyButton
+            <Button
               white
-              toCopy={
-                errObj.message && errObj.code && errObj.data
-                  ? JSON.stringify({
-                      code: errObj.code,
-                      message: errObj.message,
-                      data: errObj.data,
-                    })
-                  : errObj.message && errObj.code
-                  ? JSON.stringify({
-                      code: errObj.code,
-                      message: errObj.message,
-                    })
-                  : JSON.stringify(errObj)
+              onClick={() =>
+                setCopied(
+                  errObj.message && errObj.code && errObj.data
+                    ? JSON.stringify({
+                        code: errObj.code,
+                        message: errObj.message,
+                        data: errObj.data,
+                      })
+                    : errObj.message && errObj.code
+                    ? JSON.stringify({
+                        code: errObj.code,
+                        message: errObj.message,
+                      })
+                    : JSON.stringify(errObj)
+                )
               }
-              objectName={'Error Log'}
-            />
+            >
+              {isCopied ? (
+                <Tdiv darkPrimary>
+                  <StyledCheckmark size={20} style={{ margin: 'inherit' }} />
+                </Tdiv>
+              ) : (
+                <Tdiv darkPrimary>
+                  <StyledCopy size={20} />
+                  Copy Error
+                </Tdiv>
+              )}
+            </Button>
           )}
         </Flex>
       )}

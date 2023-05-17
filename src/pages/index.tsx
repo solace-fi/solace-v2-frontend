@@ -31,6 +31,9 @@ import { variants } from '../styles/animation-styles'
 import { fixed, formatAmount } from '../utils'
 import { useAppSelector } from '@/store/_hooks'
 import { Chain, mainnet, useAccount, useNetwork } from 'wagmi'
+import { useToast } from '@/hooks/useToast'
+import { toast } from 'react-toastify'
+
 const testTokens: ReadToken[] = [
   {
     address: '0x0000000000000000000000000000000000000000',
@@ -55,7 +58,6 @@ const testTokens: ReadToken[] = [
 
 export default function Home(): JSX.Element {
   const appTheme = useAppSelector((state) => state.general.appTheme)
-  // const { makeTxToast } = useNotifications()
 
   const [openAccordion, setOpenAccordion] = useState(false)
   const [d1, setD1] = useState(false)
@@ -76,6 +78,8 @@ export default function Home(): JSX.Element {
   const [localChain, setLocalChain] = useState<Chain>(mainnet)
   const [localAccount, setLocalAccount] = useState<string | undefined>()
 
+  const { makeTxToast } = useToast()
+
   useEffect(() => {
     if (!chain) return
     setLocalChain(chain)
@@ -84,53 +88,53 @@ export default function Home(): JSX.Element {
     setLocalAccount(account)
   }, [account])
 
-  // const successToast = async () => {
-  //   const now = Date.now()
-  //   makeTxToast(
-  //     't',
-  //     TransactionCondition.PENDING,
-  //     appTheme,
-  //     `${now}`,
-  //     '0x0000000000000000000000000000000000000000',
-  //     undefined
-  //   )
-  //   await new Promise((resolve) => setTimeout(() => resolve(`${now}`), 3000))
-  //   makeTxToast(
-  //     't',
-  //     TransactionCondition.SUCCESS,
-  //     appTheme,
-  //     `${now}`,
-  //     '0x0000000000000000000000000000000000000000',
-  //     undefined
-  //   )
-  // }
+  const successToast = async () => {
+    const now = Date.now()
+    makeTxToast(
+      't',
+      TransactionCondition.PENDING,
+      appTheme,
+      `${now}`,
+      '0x0000000000000000000000000000000000000000',
+      undefined
+    )
+    await new Promise((resolve) => setTimeout(() => resolve(`${now}`), 3000))
+    makeTxToast(
+      't',
+      TransactionCondition.SUCCESS,
+      appTheme,
+      `${now}`,
+      '0x0000000000000000000000000000000000000000',
+      undefined
+    )
+  }
 
-  // const cancelledToast = async () => {
-  //   const now = Date.now()
-  //   makeTxToast('t', TransactionCondition.PENDING, appTheme, `${now}`)
-  //   await new Promise((resolve) => setTimeout(() => resolve(`${now}`), 3000))
-  //   makeTxToast('t', TransactionCondition.CANCELLED, appTheme, `${now}`)
-  // }
+  const cancelledToast = async () => {
+    const now = Date.now()
+    makeTxToast('t', TransactionCondition.PENDING, appTheme, `${now}`)
+    await new Promise((resolve) => setTimeout(() => resolve(`${now}`), 3000))
+    makeTxToast('t', TransactionCondition.CANCELLED, appTheme, `${now}`)
+  }
 
-  // const failToast = async () => {
-  //   const now = Date.now()
-  //   makeTxToast(
-  //     't',
-  //     TransactionCondition.PENDING,
-  //     appTheme,
-  //     `${now}`,
-  //     '0x0000000000000000000000000000000000000000'
-  //   )
-  //   await new Promise((resolve) => setTimeout(() => resolve(`${now}`), 3000))
-  //   makeTxToast(
-  //     't',
-  //     TransactionCondition.FAILURE,
-  //     appTheme,
-  //     `${now}`,
-  //     '0x0000000000000000000000000000000000000000',
-  //     'failed'
-  //   )
-  // }
+  const failToast = async () => {
+    const now = Date.now()
+    makeTxToast(
+      't',
+      TransactionCondition.PENDING,
+      appTheme,
+      `${now}`,
+      '0x0000000000000000000000000000000000000000'
+    )
+    await new Promise((resolve) => setTimeout(() => resolve(`${now}`), 3000))
+    makeTxToast(
+      't',
+      TransactionCondition.FAILURE,
+      appTheme,
+      `${now}`,
+      '0x0000000000000000000000000000000000000000',
+      'failed'
+    )
+  }
 
   const handleSelectedCoin = useCallback(
     (addr: string) => {
@@ -153,21 +157,21 @@ export default function Home(): JSX.Element {
       exit="exit"
       transition={{ duration: 0.2 }}
     >
-      {/* <h6>{selectedProvider?.toString()}</h6>
-      <h6>minutes passed: {minute}</h6>
-      <h6>blocknumber: {block.number.toString()}</h6>
-      <h6>web3 chainId: {localChain.id}</h6>
-      <h6>explorer: {localChain.blockExplorers?.default.url}</h6>
-      <h6>web3 account: {localAccount}</h6> */}
+      <Tdiv primary>{selectedProvider?.toString()}</Tdiv>
+      <Tdiv primary>minutes passed: {minute}</Tdiv>
+      <Tdiv primary>blocknumber: {block.number.toString()}</Tdiv>
+      <Tdiv primary>web3 chainId: {localChain.id}</Tdiv>
+      <Tdiv primary>explorer: {localChain.blockExplorers?.default.url}</Tdiv>
+      <Tdiv primary>web3 account: {localAccount}</Tdiv>
       <Flex col itemsCenter gap={10}>
         <Flex gap={10}>
-          <Button big success>
+          <Button big success onClick={successToast}>
             create successful toast
           </Button>
-          <Button big warning>
+          <Button big warning onClick={cancelledToast}>
             create cancelled toast
           </Button>
-          <Button big error>
+          <Button big error onClick={failToast}>
             create failed toast
           </Button>
         </Flex>
