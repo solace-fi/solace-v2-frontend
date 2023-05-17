@@ -2,11 +2,18 @@ import axios from 'axios'
 import { ExplorerscanApi } from '../constants/enums'
 import { GasPriceResult, Network } from '../constants/types'
 
-export const getExplorerItemUrl = (explorer: string, address: string, api: ExplorerscanApi): string =>
-  `${explorer}/${api}/${address}`
+export const getExplorerItemUrl = (
+  explorer: string,
+  address: string,
+  api: ExplorerscanApi
+): string => `${explorer}/${api}/${address}`
 
-export async function fetchGasPrice(activeNetwork: Network): Promise<GasPriceResult> {
-  const key = activeNetwork.explorer.key ? { apikey: activeNetwork.explorer.key } : {}
+export async function fetchGasPrice(
+  activeNetwork: Network
+): Promise<GasPriceResult> {
+  const key = activeNetwork.explorer.key
+    ? { apikey: activeNetwork.explorer.key }
+    : {}
   const { data } = await axios.get(`${activeNetwork.explorer.apiUrl}/api`, {
     params: {
       module: 'gastracker',
@@ -20,12 +27,18 @@ export async function fetchGasPrice(activeNetwork: Network): Promise<GasPriceRes
     proposed: Number(result.ProposeGasPrice),
     safe: Number(result.SafeGasPrice),
   }
-  if (activeNetwork.chainId == 1) fetchedResult.suggestBaseFee = Number(result.suggestBaseFee)
+  if (activeNetwork.id == 1)
+    fetchedResult.suggestBaseFee = Number(result.suggestBaseFee)
   return fetchedResult
 }
 
-export async function fetchExplorerTxHistoryByAddress(activeNetwork: Network, address: string): Promise<any> {
-  const key = activeNetwork.explorer.key ? { apikey: activeNetwork.explorer.key } : {}
+export async function fetchExplorerTxHistoryByAddress(
+  activeNetwork: Network,
+  address: string
+): Promise<any> {
+  const key = activeNetwork.explorer.key
+    ? { apikey: activeNetwork.explorer.key }
+    : {}
   const { data } = await axios.get(`${activeNetwork.explorer.apiUrl}/api`, {
     params: {
       module: 'account',
@@ -42,8 +55,13 @@ export async function fetchExplorerTxHistoryByAddress(activeNetwork: Network, ad
   return data
 }
 
-export async function fetchTransferEventsOfUser(activeNetwork: Network, user: string): Promise<any> {
-  const key = activeNetwork.explorer.key ? { apikey: activeNetwork.explorer.key } : {}
+export async function fetchTransferEventsOfUser(
+  activeNetwork: Network,
+  user: string
+): Promise<any> {
+  const key = activeNetwork.explorer.key
+    ? { apikey: activeNetwork.explorer.key }
+    : {}
   const { data } = await axios.get(`${activeNetwork.explorer.apiUrl}/api`, {
     params: {
       module: 'account',

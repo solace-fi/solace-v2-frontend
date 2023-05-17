@@ -1,175 +1,5 @@
-// // import { Accordion } from '@/components/atoms/Accordion'
-// // import { Button } from '@/components/atoms/Button'
-// // import { Card } from '@/components/atoms/Card'
-// // import { Scrollable } from '@/components/atoms/Scrollable'
-// // import {
-// //   Table,
-// //   TableBody,
-// //   TableData,
-// //   TableFoot,
-// //   TableHead,
-// //   TableHeader,
-// //   TableRow,
-// // } from '@/components/atoms/Table'
-// import { Z_TABLE } from '@/constants'
-// import { ReadToken } from '@/constants/types'
-// import { useAppSelector, useAppDispatch } from '@/store/_hooks'
-// import { variants } from '@/styles/animation-styles'
-// import { motion } from 'framer-motion'
-// import Link from 'next/link'
-// import { useEffect, useState } from 'react'
-// import { Chain, mainnet, useAccount, useNetwork } from 'wagmi'
-
-// const testTokens: ReadToken[] = [
-//   {
-//     address: '0x0000000000000000000000000000000000000000',
-//     name: 'Test Token 1',
-//     symbol: 'TT1',
-//     decimals: 18,
-//   },
-//   {
-//     address: '0x0000000000000000000000000000000000000001',
-//     name: 'Test Token 2',
-//     symbol: 'TT2',
-//     decimals: 10,
-//   },
-//   {
-//     address: '0x0000000000000000000000000000000000000002',
-//     name: 'Test Stable',
-//     symbol: 'TS',
-//     decimals: 6,
-//     stablecoin: true,
-//   },
-// ]
-
-// export default function App() {
-//   const selectedProvider = useAppSelector(
-//     (state) => state.general.selectedProvider
-//   )
-//   const minute = useAppSelector((state) => state.general.minute)
-//   const block = useAppSelector((state) => state.provider.latestBlock)
-
-//   // const { chainId, account } = useWeb3React()
-//   const { chain } = useNetwork()
-//   const { address: account } = useAccount()
-
-//   const [localChain, setLocalChain] = useState<Chain>(mainnet)
-//   const [localAccount, setLocalAccount] = useState<string>('')
-//   const [localExplorer, setLocalExplorer] = useState<string>('')
-
-//   const [openAccordion, setOpenAccordion] = useState(false)
-//   const [d1, setD1] = useState(false)
-//   const [selectedD1, setSelectedD1] = useState<ReadToken | undefined>(undefined)
-//   const [d1Input, setD1Input] = useState<string>('')
-//   const [inputValue, setInputValue] = useState('')
-//   const [checked, setChecked] = useState(false)
-//   const [openDates, setOpenDates] = useState<boolean>(false)
-//   const [date, setDate] = useState<Date>(new Date())
-
-//   useEffect(() => {
-//     if (!chain) return
-//     setLocalChain(chain)
-//   }, [chain])
-
-//   useEffect(() => {
-//     if (!account) return
-//     setLocalAccount(account)
-//   }, [account])
-
-//   return (
-//     <motion.div
-//       variants={variants.drop}
-//       initial="initial"
-//       animate="animate"
-//       exit="exit"
-//       transition={{ duration: 0.2 }}
-//     >
-//       <h1>{selectedProvider?.toString()}</h1>
-//       <h1>minutes passed: {minute}</h1>
-//       <h1>blocknumber: {block.number.toString()}</h1>
-//       <h1>web3 chainId: {localChain.id}</h1>
-//       <h1>explorer: {localChain.blockExplorers?.default.url}</h1>
-//       <h1>web3 account: {localAccount}</h1>
-//       <Link href={'/dashboard'}>
-//         <h3>See dashboard</h3>
-//       </Link>
-//       <Link href={'/pools'}>
-//         <h3>See Pools</h3>
-//       </Link>
-//       {/* <div className="flex flex-col items-center gap-2">
-//         <div className="flex gap-2">
-//           <Button>create successful toast</Button>
-//           <Button>create cancelled toast</Button>
-//           <Button>create failed toast</Button>
-//         </div>
-//         <div className="h-1" />
-//         <div className="flex gap-2 w-full">
-//           <div className="flex flex-col gap-4 p-5">
-//             <div>primary</div>
-//             <div>secondary</div>
-//             <div>tertiary</div>
-//             <div>lightprimary</div>
-//             <div>lightsecondary</div>
-//             <div>lighttertiary</div>
-//             <div>darkprimary</div>
-//             <div>darksecondary</div>
-//             <div>darktertiary</div>
-//             <div>info</div>
-//             <div>success</div>
-//             <div>warning</div>
-//             <div>error</div>
-//             <div>inquiry</div>
-//           </div>
-//           <Scrollable>
-//             <Table>
-//               <TableHead sticky zIndex={Z_TABLE + 1}>
-//                 <TableRow>
-//                   <TableHeader>A</TableHeader>
-//                   <TableHeader>B</TableHeader>
-//                   <TableHeader>C</TableHeader>
-//                 </TableRow>
-//               </TableHead>
-//               <TableBody>
-//                 {Array.from(Array(10).keys()).map((i) => {
-//                   return (
-//                     <TableRow key={i}>
-//                       <TableData>1</TableData>
-//                       <TableData>2</TableData>
-//                       <TableData>3</TableData>
-//                     </TableRow>
-//                   )
-//                 })}
-//               </TableBody>
-//               <TableFoot sticky zIndex={Z_TABLE + 1}>
-//                 <TableRow>
-//                   <TableHeader>E</TableHeader>
-//                   <TableHeader>F</TableHeader>
-//                   <TableHeader>G</TableHeader>
-//                 </TableRow>
-//               </TableFoot>
-//             </Table>
-//           </Scrollable>
-//           <div className="flex flex-col">
-//             <button
-//               className="p-16"
-//               onClick={() => setOpenAccordion(!openAccordion)}
-//             >
-//               Test Accordion
-//             </button>
-//             <Accordion isOpen={openAccordion}>
-//               <Card>Inside Accordion</Card>
-//               <Card>Inside Accordion</Card>
-//               <Card>Inside Accordion</Card>
-//             </Accordion>
-//           </div>
-//         </div>
-//       </div> */}
-//     </motion.div>
-//   )
-// }
-
 import { motion } from 'framer-motion'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Accordion } from '@/components/atoms/Accordion'
 import { HorizontalSeparator } from '@/components/atoms/Break'
 import { Button } from '@/components/atoms/Button'
@@ -200,7 +30,7 @@ import { ReadToken } from '../constants/types'
 import { variants } from '../styles/animation-styles'
 import { fixed, formatAmount } from '../utils'
 import { useAppSelector } from '@/store/_hooks'
-
+import { Chain, mainnet, useAccount, useNetwork } from 'wagmi'
 const testTokens: ReadToken[] = [
   {
     address: '0x0000000000000000000000000000000000000000',
@@ -235,6 +65,24 @@ export default function Home(): JSX.Element {
   const [checked, setChecked] = useState(false)
   const [openDates, setOpenDates] = useState<boolean>(false)
   const [date, setDate] = useState<Date>(new Date())
+
+  const selectedProvider = useAppSelector(
+    (state) => state.general.selectedProvider
+  )
+  const minute = useAppSelector((state) => state.general.minute)
+  const block = useAppSelector((state) => state.provider.latestBlock)
+  const { chain } = useNetwork()
+  const { address: account } = useAccount()
+  const [localChain, setLocalChain] = useState<Chain>(mainnet)
+  const [localAccount, setLocalAccount] = useState<string | undefined>()
+
+  useEffect(() => {
+    if (!chain) return
+    setLocalChain(chain)
+  }, [chain])
+  useEffect(() => {
+    setLocalAccount(account)
+  }, [account])
 
   // const successToast = async () => {
   //   const now = Date.now()
@@ -305,18 +153,24 @@ export default function Home(): JSX.Element {
       exit="exit"
       transition={{ duration: 0.2 }}
     >
+      {/* <h6>{selectedProvider?.toString()}</h6>
+      <h6>minutes passed: {minute}</h6>
+      <h6>blocknumber: {block.number.toString()}</h6>
+      <h6>web3 chainId: {localChain.id}</h6>
+      <h6>explorer: {localChain.blockExplorers?.default.url}</h6>
+      <h6>web3 account: {localAccount}</h6> */}
       <Flex col itemsCenter gap={10}>
-        {/* <Flex gap={10}>
-          <Button big success onClick={successToast}>
+        <Flex gap={10}>
+          <Button big success>
             create successful toast
           </Button>
-          <Button big warning onClick={cancelledToast}>
+          <Button big warning>
             create cancelled toast
           </Button>
-          <Button big error onClick={failToast}>
+          <Button big error>
             create failed toast
           </Button>
-        </Flex> */}
+        </Flex>
         <HorizontalSeparator widthP={100} />
         <Flex gap={10} widthP={100}>
           <Flex col gap={4} p={5}>
@@ -538,7 +392,7 @@ export default function Home(): JSX.Element {
               alwaysShowChildren
               link={'https://google.com'}
             >
-              <Button>Hover over me</Button>
+              <Button>Hover over me, I have link</Button>
             </StyledTooltip>
             <Button onClick={() => setOpenDates(!openDates)}>
               Open Calendar

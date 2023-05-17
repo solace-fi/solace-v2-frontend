@@ -1,10 +1,10 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react'
+import React, { Fragment, use, useEffect, useRef, useState } from 'react'
 import { PropsWithChildren } from 'react'
 import { MobileNavPanelComponent, TopNav, MobileNavMenu } from '../atoms/Navbar'
 import { Button } from '../atoms/Button'
 import { Flex } from '../atoms/Flex'
 import { StyledMenu, StyledMoon, StyledSun } from '../atoms/Icon'
-import { RouteInfo } from '../../constants/types'
+import { Network, RouteInfo } from '../../constants/types'
 import { shortenAddress } from '../../utils'
 import { TabLabelLink, Tdiv } from '../atoms/Text'
 import { UserImage } from '../molecules/UserImage'
@@ -22,6 +22,10 @@ import { toggleTheme } from '@/store/general/generalSlice'
 import { useAccount, useEnsName, useNetwork } from 'wagmi'
 import { useDispatch } from 'react-redux'
 import { setShowAccount, setShowNetworks } from '@/store/ui/uiSlice'
+import { Mainnet, NETWORKS } from '@/constants/networks'
+import { StyledNavLink } from '../atoms/Link'
+import { useRouter } from 'next/router'
+import makeBlockie from 'ethereum-blockies-base64'
 
 export function MobileNavPanel(
   props: PropsWithChildren & {
@@ -31,10 +35,9 @@ export function MobileNavPanel(
   }
 ): JSX.Element {
   const appTheme = useAppSelector((state) => state.general.appTheme)
+  const router = useRouter()
 
   const { isMobile } = useWindowDimensions()
-  // const navigate = useNavigate()
-  // const location = useLocation()
 
   return (
     <MobileNavPanelComponent shouldShow={props.show}>
@@ -57,9 +60,9 @@ export function MobileNavPanel(
             >
               <Tdiv
                 info={
-                  location.pathname == page.to ||
+                  router.pathname == page.to ||
                   page.children?.some((child) =>
-                    location.pathname.includes(child)
+                    router.pathname.includes(child)
                   )
                 }
               >
@@ -102,13 +105,22 @@ export function MobileNavbar(
     networkButtonRef: React.RefObject<HTMLDivElement>
   }
 ): JSX.Element {
-  // const { activeNetwork } = useNetwork()
-  // const { account } = useWeb3React()
-  // const { toggleAccount, toggleNetworks } = useCache()
+  const dispatch = useAppDispatch()
+  const showNetworks = useAppSelector((state) => state.ui.showNetworks)
+  const showAccount = useAppSelector((state) => state.ui.showAccount)
   const [show, setShow] = useState(false)
 
   const { chain } = useNetwork()
   const { address: account } = useAccount()
+
+  const [localChain, setLocalChain] = useState<Network>(Mainnet)
+
+  useEffect(() => {
+    if (chain) {
+      const foundNetwork = NETWORKS.find((n) => n.id === chain.id)
+      if (foundNetwork) setLocalChain(foundNetwork)
+    }
+  }, [chain])
 
   return (
     <>
@@ -130,21 +142,23 @@ export function MobileNavbar(
               p={4}
               outlined
               style={{ borderRadius: '28px', minWidth: 'unset' }}
-              // onClick={toggleNetworks}
+              onClick={() => dispatch(setShowNetworks(!showNetworks))}
             >
-              {/* {chain.logo && <img src={chain.logo} width={30} height={30} />} */}
+              {localChain.logo && (
+                <img src={localChain.logo} width={30} height={30} />
+              )}
             </Button>
           </span>
           <span ref={props.accountButtonRef}>
             <Button
               transparent
               nohover
-              // onClick={toggleAccount}
+              onClick={() => dispatch(setShowAccount(!showAccount))}
               style={{ borderRadius: '28px', minWidth: 'unset' }}
             >
               {account ? (
                 <UserImage width={35} height={35} style={{ margin: 'auto' }}>
-                  {/* <img src={makeBlockie(account)} alt={'account'} /> */}
+                  <img src={makeBlockie(account)} alt={'account'} />
                 </UserImage>
               ) : (
                 <img src={UnconnectedUser} />
@@ -164,14 +178,33 @@ export function FullNavbar(
     networkButtonRef: React.RefObject<HTMLDivElement>
   }
 ): JSX.Element {
-  // const { account } = useWeb3React()
-  // const name = useENS()
-  // const { activeNetwork } = useNetwork()
   const [scrollPosition, setScrollPosition] = useState(0)
-  const { address: account } = useAccount()
   const { data: ensName } = useEnsName()
-  // const location = useLocation()
-  // const { toggleAccount, toggleNetworks } = useCache()
+
+  const showAccount = useAppSelector((state) => state.ui.showAccount)
+  const showNetworks = useAppSelector((state) => state.ui.showNetworks)
+  const router = useRouter()
+
+  const dispatch = useAppDispatch()
+
+  const { chain } = useNetwork()
+  const { address: account } = useAccount()
+
+  const [localChain, setLocalChain] = useState<Network>(Mainnet)
+  const [localAccount, setLocalAccount] = useState<string | undefined>(
+    undefined
+  )
+
+  useEffect(() => {
+    if (chain) {
+      const foundNetwork = NETWORKS.find((n) => n.id === chain.id)
+      if (foundNetwork) setLocalChain(foundNetwork)
+    }
+  }, [chain])
+
+  useEffect(() => {
+    setLocalAccount(account)
+  }, [account])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -189,20 +222,22 @@ export function FullNavbar(
     <>
       <Flex stretch between px={20}>
         <Flex gap={20} itemsCenter>
-          <Logo location={location} />
+          <Logo location={router} />
           <Flex gap={20}>
             {props.routeInfoArr.map((page) => (
               <Fragment key={page.to}>
                 <TabLabelLink
                   t4
                   selected={
-                    location.pathname == page.to ||
+                    router.pathname == page.to ||
                     page.children?.some((child) =>
-                      location.pathname.includes(child)
+                      router.pathname.includes(child)
                     )
                   }
                 >
-                  {/* <StyledNavLink to={page.to}>{page.name}</StyledNavLink> */}
+                  <StyledNavLink href={`/${page.to}`}>
+                    {page.name}
+                  </StyledNavLink>
                 </TabLabelLink>
               </Fragment>
             ))}
@@ -215,21 +250,19 @@ export function FullNavbar(
               outlined
               p={8}
               style={{ borderRadius: '28px', minWidth: 'unset' }}
-              // onClick={toggleNetworks}
+              onClick={() => dispatch(setShowNetworks(!showNetworks))}
             >
-              {/* <Flex>
-                {activeNetwork.logo && (
-                  <img
-                    src={activeNetwork.logo}
-                    width={30}
-                    height={30}
-                    style={{ marginRight: '2px' }}
-                  />
-                )}
+              <Flex>
+                <img
+                  src={localChain.logo}
+                  width={30}
+                  height={30}
+                  style={{ marginRight: '2px' }}
+                />
                 <Tdiv nowrap autoAlignVertical>
-                  {activeNetwork.name}
+                  {localChain.name}
                 </Tdiv>
-              </Flex> */}
+              </Flex>
             </Button>
           </span>
           <span ref={props.accountButtonRef}>
@@ -238,21 +271,21 @@ export function FullNavbar(
               outlined
               p={8}
               style={{ borderRadius: '28px', minWidth: 'unset' }}
-              // onClick={toggleAccount}
+              onClick={() => dispatch(setShowAccount(!showAccount))}
             >
               <Flex between gap={5} itemsCenter>
-                {account ? (
+                {localAccount ? (
                   <UserImage width={30} height={30} style={{ margin: 'auto' }}>
-                    {/* <img src={makeBlockie(account)} alt={'account'} /> */}
+                    <img src={makeBlockie(localAccount)} alt={'account'} />
                   </UserImage>
                 ) : (
                   <img src={UnconnectedUser} />
                 )}
                 {scrollPosition <= 40 &&
-                  (account ? (
+                  (localAccount ? (
                     <Flex col around>
                       <Tdiv textAlign="left" t4>
-                        {ensName ?? shortenAddress(account)}
+                        {ensName ?? shortenAddress(localAccount)}
                       </Tdiv>
                     </Flex>
                   ) : (
@@ -284,26 +317,39 @@ export function Navbar(
   const accountPanelRef = useRef<HTMLDivElement>(null)
   const networkPanelRef = useRef<HTMLDivElement>(null)
 
+  const [isMobileLocal, setIsMobileLocal] = useState<boolean>(false)
+
+  const [displaySmallNavbar, setDisplaySmallNavbar] = useState<boolean>(false)
+
   useOnClickOutside(
     accountButtonRef,
     showAccount ? () => dispatch(setShowAccount(false)) : undefined,
     [accountPanelRef]
   )
+
   useOnClickOutside(
     networkButtonRef,
     showNetworks ? () => dispatch(setShowNetworks(false)) : undefined,
     [networkPanelRef]
   )
 
+  useEffect(() => {
+    setDisplaySmallNavbar(isTablet || isMobile)
+  }, [isTablet, isMobile])
+
+  useEffect(() => {
+    setIsMobileLocal(isMobile)
+  }, [isMobile])
+
   return (
     <TopNav>
       <span ref={accountPanelRef}>
-        {!isMobile ? <AccountPopupPanel /> : <AccountPopupPanelMobile />}
+        {!isMobileLocal ? <AccountPopupPanel /> : <AccountPopupPanelMobile />}
       </span>
       <span ref={networkPanelRef}>
-        {!isMobile ? <NetworkPopupPanel /> : <NetworkPopupPanelMobile />}
+        {!isMobileLocal ? <NetworkPopupPanel /> : <NetworkPopupPanelMobile />}
       </span>
-      {isTablet || isMobile ? (
+      {displaySmallNavbar ? (
         <MobileNavbar
           routeInfoArr={props.routeInfoArr}
           accountButtonRef={accountButtonRef}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 // import { useProvider, useNetwork, useCache } from '../../context'
 import { Card } from '../atoms/Card'
 import { Flex } from '../atoms/Flex'
@@ -9,22 +9,22 @@ import { Network } from '../../constants/types'
 import { motion } from 'framer-motion'
 import { variants } from '../../styles/animation-styles'
 import { Chain, useSwitchNetwork, useNetwork } from 'wagmi'
+import { useAppSelector } from '@/store/_hooks'
 
 export function NetworkPopupPanel(): JSX.Element {
-  // const { showNetworks } = useCache()
-  const showNetworks = true
-
   const [showTestnets, setShowTestnets] = useState<boolean>(false)
   const { chain } = useNetwork()
 
-  // const { adjustedNetworks, showTestnets, handleShowTestnets } = useProvider()
-  // const { activeNetwork, changeNetwork } = useNetwork()
-
   const { chains, switchNetwork } = useSwitchNetwork()
+  const showNetworks = useAppSelector((state) => state.ui.showNetworks)
 
   const adjustedChains = showTestnets
     ? chains
     : chains.filter((c) => !c.testnet)
+
+  useEffect(() => {
+    if (chain) setShowTestnets(chain?.testnet ?? false)
+  }, [chain])
 
   return (
     <>
@@ -84,14 +84,10 @@ export function NetworkPopupPanel(): JSX.Element {
 }
 
 export function NetworkPopupPanelMobile(): JSX.Element {
-  // const { showNetworks } = useCache()
-  const showNetworks = true
+  const showNetworks = useAppSelector((state) => state.ui.showNetworks)
 
   const [showTestnets, setShowTestnets] = useState<boolean>(false)
   const { chain } = useNetwork()
-
-  // const { adjustedNetworks, showTestnets, handleShowTestnets } = useProvider()
-  // const { activeNetwork, changeNetwork } = useNetwork()
 
   const { chains, switchNetwork } = useSwitchNetwork()
 

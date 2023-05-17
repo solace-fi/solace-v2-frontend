@@ -28,6 +28,5 @@ export type RouteInfo = {
   name: string
   title: string
   to: string
-  element: JSX.Element
   children?: string[]
 }

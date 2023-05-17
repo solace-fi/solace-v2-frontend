@@ -8,14 +8,13 @@ import {
 } from '../atoms/Input'
 import { Flex } from '../atoms/Flex'
 import { Tdiv } from '../atoms/Text'
-// import { useGeneral } from '../../context/GeneralManager'
 import { TokenInfo } from '../../constants/types'
-import { formatUnits } from 'ethers/lib/utils'
-// import { truncateValue } from '../../utils/formatting'
+import { truncateValue } from '../../utils/formatting'
 import { StyledArrowDropDown } from '../atoms/Icon'
 import { Card } from '../atoms/Card'
 import { useWindowDimensions } from '../../hooks/internal/useWindowDimensions'
-import { useAppDispatch, useAppSelector } from '@/store/_hooks'
+import { useAppSelector } from '@/store/_hooks'
+import { formatUnits } from 'viem'
 
 export const GenericInputSection = ({
   hasArrow,
@@ -56,7 +55,6 @@ export const GenericInputSection = ({
   nohover?: boolean
   displayIconOnMobile?: boolean
 }): JSX.Element => {
-  // const { appTheme } = useGeneral()
   const appTheme = useAppSelector((state) => state.general.appTheme)
 
   const { isMobile } = useWindowDimensions()
@@ -211,7 +209,6 @@ export const DropdownOptions = ({
   customProcessFunction?: (value: string) => string
   customHeight?: number
 }): JSX.Element => {
-  // const { appTheme } = useGeneral()
   const appTheme = useAppSelector((state) => state.general.appTheme)
 
   const gradientStyle = useMemo(
@@ -284,7 +281,6 @@ export const BalanceDropdownOptions = ({
   comparingList?: string[]
   onClick?: (value: string) => void
 }): JSX.Element => {
-  // const { appTheme } = useGeneral()
   const appTheme = useAppSelector((state) => state.general.appTheme)
 
   const gradientStyle = useMemo(
@@ -322,11 +318,18 @@ export const BalanceDropdownOptions = ({
                 />
                 <Tdiv {...gradientStyle}>{item.symbol}</Tdiv>
               </Flex>
-              {/* <Tdiv autoAlignVertical>
+              <Tdiv autoAlignVertical>
                 {item.price > 0 && !ignorePrice
-                  ? `~$${truncateValue(parseFloat(formatUnits(item.balance, item.decimals)) * item.price, 2)}`
-                  : `${truncateValue(formatUnits(item.balance, item.decimals), 2)}`}
-              </Tdiv> */}
+                  ? `~$${truncateValue(
+                      parseFloat(formatUnits(item.balance, item.decimals)) *
+                        item.price,
+                      2
+                    )}`
+                  : `${truncateValue(
+                      formatUnits(item.balance, item.decimals),
+                      2
+                    )}`}
+              </Tdiv>
             </Flex>
           </Card>
         ))}

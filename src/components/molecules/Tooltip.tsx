@@ -1,5 +1,5 @@
 /* import packages */
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, useEffect, useState } from 'react'
 import { Tooltip } from 'react-tooltip'
 import styled, { css } from 'styled-components'
 import 'react-tooltip/dist/react-tooltip.css'
@@ -13,6 +13,7 @@ import { Tdiv } from '../atoms/Text'
 
 /* import hooks */
 import { useWindowDimensions } from '../../hooks/internal/useWindowDimensions'
+import { HyperLink } from '../atoms/Link'
 
 type StyledTooltipProps = {
   id: string
@@ -87,22 +88,37 @@ export function StyledTooltip({
 
   *************************************************************************************/
   const { isDesktop } = useWindowDimensions()
+  const [showChildren, setShowChildren] = useState<boolean>(false)
+  const [isOnDesktop, setIsOnDesktop] = useState<boolean>(false)
+  const [localLink, setLocalLink] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    if (alwaysShowChildren != undefined) setShowChildren(alwaysShowChildren)
+  }, [alwaysShowChildren])
+
+  useEffect(() => {
+    setIsOnDesktop(isDesktop)
+  }, [isDesktop])
+
+  useEffect(() => {
+    setLocalLink(link)
+  }, [link])
 
   return (
     <>
-      {isDesktop ? (
+      {isOnDesktop ? (
         <div>
           {disabled ? (
             children
           ) : (
             <div>
-              <a id={id} data-tooltip-content={tip}>
+              <a data-tooltip-id={id} data-tooltip-content={tip}>
                 {children}
               </a>
-              <CustomTooltip anchorId={id}>
-                {link ? (
-                  <a
-                    href={link}
+              <CustomTooltip id={id}>
+                {localLink ? (
+                  <HyperLink
+                    href={localLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ textDecoration: 'none', color: '#fff' }}
@@ -114,7 +130,7 @@ export function StyledTooltip({
                     <Tdiv inquiry textAlign="center" mt={1} bold>
                       Learn more <StyledLinkExternal size={20} />
                     </Tdiv>
-                  </a>
+                  </HyperLink>
                 ) : (
                   <Tdiv t4 primary>
                     {tip}
@@ -124,7 +140,7 @@ export function StyledTooltip({
             </div>
           )}
         </div>
-      ) : alwaysShowChildren ? (
+      ) : showChildren ? (
         children
       ) : null}
     </>

@@ -9,8 +9,6 @@ import { Tdiv } from '../atoms/Text'
 import { useAccount, useConnect } from 'wagmi'
 
 export const WalletList = () => {
-  // const { connector } = useWeb3React()
-  // const { connect } = useWallet()
   const { connector } = useAccount()
   const { connect, connectors } = useConnect()
 

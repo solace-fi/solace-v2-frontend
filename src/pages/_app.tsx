@@ -11,7 +11,6 @@ import { WagmiConfig, configureChains, createConfig } from 'wagmi'
 import { Goerli, Aurora, Mainnet, Fantom, Polygon } from '@/constants/networks'
 // import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { LedgerConnector } from 'wagmi/connectors/ledger'
 import { publicProvider } from 'wagmi/providers/public'
@@ -23,9 +22,13 @@ import {
   ALCHEMY_POLYGON_API_KEY,
 } from '@/constants'
 import { ThemeProvider } from 'styled-components'
-import { GlobalStyle } from '@/components/atoms/Layout'
+import { GlobalStyle, Layout } from '@/components/atoms/Layout'
 import { ToastContainer } from 'react-toastify'
 import { lightTheme, darkTheme } from '../styles/themes'
+import { RouteInfo } from '@/constants/types'
+import { Navbar } from '@/components/organisms/Navbar'
+import { AnimatePresence } from 'framer-motion'
+import '../styles/index.css'
 
 function Updaters() {
   return (
@@ -39,7 +42,7 @@ function Updaters() {
 
 export default function App({ Component, pageProps }: AppProps) {
   const { chains, publicClient, webSocketPublicClient } = configureChains(
-    [Goerli, Aurora, Mainnet, Fantom, Polygon],
+    [Mainnet, Polygon, Aurora, Fantom, Goerli],
     [
       alchemyProvider({ apiKey: String(ALCHEMY_ETHEREUM_API_KEY) }),
       alchemyProvider({ apiKey: String(ALCHEMY_POLYGON_API_KEY) }),
@@ -58,7 +61,6 @@ export default function App({ Component, pageProps }: AppProps) {
     webSocketPublicClient,
     connectors: [
       new InjectedConnector({ chains }),
-      new MetaMaskConnector({ chains }),
       // new WalletConnectConnector({
       //   chains,
       //   options: {
@@ -70,14 +72,38 @@ export default function App({ Component, pageProps }: AppProps) {
     ],
   })
 
+  const routeInfoArr: RouteInfo[] = [
+    {
+      name: 'Playground',
+      title: 'Playground',
+      to: 'playground',
+    },
+    {
+      name: 'Risk Market',
+      title: 'Risk Market',
+      to: '',
+      // children: ['/pool'],
+    },
+    {
+      name: 'Dashboard',
+      title: 'Dashboard',
+      to: 'dashboard',
+    },
+  ]
+
   return (
     <Provider store={store}>
       <WagmiConfig config={wagmiConfig}>
         <StyledThemeProvider>
-          <GlobalStyle />
-          <ToastContainer />
           <Updaters />
-          <Component {...pageProps} />
+          <Navbar routeInfoArr={routeInfoArr} />
+          <Layout>
+            <AnimatePresence mode="wait" initial={false}>
+              <GlobalStyle key={'_globalStyle'} />
+              <Component {...pageProps} />
+              <ToastContainer key={'_toastContainer'} />
+            </AnimatePresence>
+          </Layout>
         </StyledThemeProvider>
       </WagmiConfig>
     </Provider>

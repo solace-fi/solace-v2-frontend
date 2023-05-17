@@ -1,38 +1,16 @@
+import { Chain } from 'viem'
 import { ContractSources } from '.'
 
-export type Network = {
-  name: string
-  chainId: number
-  isTestnet: boolean
+export type Network = Chain & {
   supportedTxTypes: number[]
   logo: string
-  rpc: {
-    urls: string[]
-    pollingInterval: number
-    blockConfirms: number
-  }
-  nativeCurrency: {
-    name: string
-    symbol: string
-    decimals: number
-  }
+  isTestnet: boolean
   explorer: {
     name: string
     key: string
     url: string
     apiUrl: string
     excludedContractAddrs: string[]
-  }
-  metamaskChain: {
-    chainId: string
-    chainName: string
-    nativeCurrency: {
-      name: string
-      symbol: string
-      decimals: number
-    }
-    rpcUrls: string[]
-    blockExplorerUrls: string[]
   }
   config: {
     generalContracts: { [key: string]: ContractSources }

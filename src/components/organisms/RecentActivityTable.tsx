@@ -21,6 +21,7 @@ import {
 } from '../atoms/Table'
 import { Tdiv } from '../atoms/Text'
 import { useNetwork } from 'wagmi'
+import { HyperLink } from '../atoms/Link'
 
 export function RecentActivityTable() {
   const { chain } = useNetwork()
@@ -71,7 +72,7 @@ export function RecentActivityTable() {
                 pl={isMobile ? 0 : undefined}
                 pr={isMobile ? 0 : undefined}
               >
-                <a
+                <HyperLink
                   href={getExplorerItemUrl(
                     chain?.blockExplorers?.default?.url ?? '',
                     pendingtx.hash,
@@ -81,7 +82,7 @@ export function RecentActivityTable() {
                   rel="noopener noreferrer"
                 >
                   <Button>{shortenAddress(pendingtx.hash)}</Button>
-                </a>
+                </HyperLink>
               </TableData>
             </TableRow>
           ))}
@@ -120,7 +121,7 @@ export function RecentActivityTable() {
                   pr={isMobile ? 0 : undefined}
                 >
                   {txHistory.length > 0 && (
-                    <a
+                    <HyperLink
                       href={getExplorerItemUrl(
                         chain?.blockExplorers?.default?.url ?? '',
                         tx.hash,
@@ -130,7 +131,7 @@ export function RecentActivityTable() {
                       rel="noopener noreferrer"
                     >
                       <Button>{shortenAddress(tx.hash)}</Button>
-                    </a>
+                    </HyperLink>
                   )}
                 </TableData>
               </TableRow>

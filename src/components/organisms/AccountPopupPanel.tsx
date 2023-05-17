@@ -1,10 +1,8 @@
-// import { useWeb3React } from '@web3-react/core'
-// import makeBlockie from 'ethereum-blockies-base64'
+import makeBlockie from 'ethereum-blockies-base64'
 import { motion } from 'framer-motion'
-import React, { useState } from 'react'
-// import { useCache, useGeneral, useWallet } from '../../context'
+import React, { useEffect, useState } from 'react'
 import { variants } from '../../styles/animation-styles'
-import { shortenAddress } from '../../utils'
+import { getExplorerItemUrl, shortenAddress } from '../../utils'
 import { Button } from '../atoms/Button'
 import { Card } from '../atoms/Card'
 import { Flex } from '../atoms/Flex'
@@ -20,26 +18,20 @@ import { CopyButton } from '../molecules/CopyButton'
 import { UserImage } from '../molecules/UserImage'
 import { WalletList } from '../molecules/WalletList'
 import { RecentActivityTable } from './RecentActivityTable'
-import { useAccount, useDisconnect, useEnsName } from 'wagmi'
+import { useAccount, useDisconnect, useEnsName, useNetwork } from 'wagmi'
 import { useAppDispatch, useAppSelector } from '@/store/_hooks'
 import { toggleTheme } from '@/store/general/generalSlice'
+import { ExplorerscanApi } from '@/constants/enums'
+import { HyperLink } from '../atoms/Link'
 
 export function AccountPopupPanel(): JSX.Element {
-  // const { selectedProvider, appTheme, toggleTheme } = useGeneral()
-
   const dispatch = useAppDispatch()
 
   const appTheme = useAppSelector((state) => state.general.appTheme)
-  const selectedProvider = useAppSelector(
-    (state) => state.general.selectedProvider
-  )
+  const showAccount = useAppSelector((state) => state.ui.showAccount)
 
   const { data: name } = useEnsName()
-  // const { account } = useWeb3React()
   const { address: account } = useAccount()
-  // const { showAccount } = useCache()
-  const showAccount = true
-  // const { disconnect } = useWallet()
   const { disconnect } = useDisconnect()
 
   const [showCopyTip, setShowCopyTip] = useState(false)
@@ -49,6 +41,16 @@ export function AccountPopupPanel(): JSX.Element {
   const [panelState, setPanelState] = useState<'start' | 'wallet' | 'tx'>(
     'start'
   )
+
+  const { chain } = useNetwork()
+
+  const [explorerUrl, setExplorerUrl] = React.useState('')
+
+  useEffect(() => {
+    if (chain && chain.blockExplorers?.default.url) {
+      setExplorerUrl(chain.blockExplorers?.default.url)
+    }
+  }, [chain])
 
   return (
     <>
@@ -68,10 +70,10 @@ export function AccountPopupPanel(): JSX.Element {
             exit="exit"
           >
             <Card interactiveBg col outlined>
-              {account && selectedProvider && (
+              {account && (
                 <Flex itemsCenter gap={5} mb={20} justifyCenter>
                   <UserImage width={25} height={25}>
-                    {/* <img src={makeBlockie(account)} alt={'account'} /> */}
+                    <img src={makeBlockie(account)} alt={'account'} />
                   </UserImage>
                   <Tdiv t4 semibold>
                     {name ?? shortenAddress(account)}
@@ -107,7 +109,17 @@ export function AccountPopupPanel(): JSX.Element {
                       style={{ position: 'relative' }}
                     >
                       <Tdiv primary>
-                        <StyledLinkExternal size={20} />
+                        <HyperLink
+                          href={getExplorerItemUrl(
+                            explorerUrl,
+                            account,
+                            ExplorerscanApi.ADDRESS
+                          )}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <StyledLinkExternal size={20} />
+                        </HyperLink>
                       </Tdiv>
                       {showExploreTip && (
                         <Tspan t6 style={{ position: 'absolute', top: '30px' }}>
@@ -185,7 +197,7 @@ export function AccountPopupPanel(): JSX.Element {
               <Flex justifyCenter mt={20}>
                 <Button
                   outlined={appTheme == 'light'}
-                  onClick={dispatch(toggleTheme)}
+                  onClick={() => dispatch(toggleTheme())}
                   white
                   onMouseEnter={() => setShowThemeTip(true)}
                   onMouseLeave={() => setShowThemeTip(false)}
@@ -211,21 +223,13 @@ export function AccountPopupPanel(): JSX.Element {
 }
 
 export function AccountPopupPanelMobile(): JSX.Element {
-  // const { selectedProvider, appTheme, toggleTheme } = useGeneral()
-
   const dispatch = useAppDispatch()
 
   const appTheme = useAppSelector((state) => state.general.appTheme)
-  const selectedProvider = useAppSelector(
-    (state) => state.general.selectedProvider
-  )
 
   const { data: name } = useEnsName()
-  // const { account } = useWeb3React()
   const { address: account } = useAccount()
-  // const { showAccount } = useCache()
-  const showAccount = true
-  // const { disconnect } = useWallet()
+  const showAccount = useAppSelector((state) => state.ui.showAccount)
   const { disconnect } = useDisconnect()
 
   const [showCopyTip, setShowCopyTip] = useState(false)
@@ -235,6 +239,16 @@ export function AccountPopupPanelMobile(): JSX.Element {
   const [panelState, setPanelState] = useState<'start' | 'wallet' | 'tx'>(
     'start'
   )
+
+  const { chain } = useNetwork()
+
+  const [explorerUrl, setExplorerUrl] = React.useState('')
+
+  useEffect(() => {
+    if (chain && chain.blockExplorers?.default.url) {
+      setExplorerUrl(chain.blockExplorers?.default.url)
+    }
+  }, [chain])
 
   return (
     <>
@@ -254,10 +268,10 @@ export function AccountPopupPanelMobile(): JSX.Element {
             exit="exit"
           >
             <Card col interactiveBg outlined style={{ borderRadius: '0' }}>
-              {account && selectedProvider && (
+              {account && (
                 <Flex itemsCenter gap={5} mb={20} justifyCenter>
                   <UserImage width={25} height={25}>
-                    {/* <img src={makeBlockie(account)} alt={'account'} /> */}
+                    <img src={makeBlockie(account)} alt={'account'} />
                   </UserImage>
                   <Tdiv t4 semibold>
                     {name ?? shortenAddress(account)}
@@ -272,7 +286,17 @@ export function AccountPopupPanelMobile(): JSX.Element {
                       radius={50}
                       height={30}
                       style={{ position: 'relative' }}
-                    ></CopyButton>
+                    >
+                      {showCopyTip && (
+                        <Tspan
+                          primary
+                          t6
+                          style={{ position: 'absolute', top: '30px' }}
+                        >
+                          Copy
+                        </Tspan>
+                      )}
+                    </CopyButton>
                     <Button
                       transparent
                       onMouseEnter={() => setShowExploreTip(true)}
@@ -283,8 +307,23 @@ export function AccountPopupPanelMobile(): JSX.Element {
                       style={{ position: 'relative' }}
                     >
                       <Tdiv primary>
-                        <StyledLinkExternal size={20} />
+                        <HyperLink
+                          href={getExplorerItemUrl(
+                            explorerUrl,
+                            account,
+                            ExplorerscanApi.ADDRESS
+                          )}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <StyledLinkExternal size={20} />
+                        </HyperLink>
                       </Tdiv>
+                      {showExploreTip && (
+                        <Tspan t6 style={{ position: 'absolute', top: '30px' }}>
+                          Explorer
+                        </Tspan>
+                      )}
                     </Button>
                   </Flex>
                 </Flex>
@@ -356,7 +395,7 @@ export function AccountPopupPanelMobile(): JSX.Element {
               <Flex justifyCenter mt={20}>
                 <Button
                   outlined={appTheme == 'light'}
-                  onClick={dispatch(toggleTheme)}
+                  onClick={() => dispatch(toggleTheme())}
                   white
                   onMouseEnter={() => setShowThemeTip(true)}
                   onMouseLeave={() => setShowThemeTip(false)}
@@ -368,6 +407,11 @@ export function AccountPopupPanelMobile(): JSX.Element {
                     <StyledSun size={30} />
                   ) : (
                     <StyledMoon size={30} />
+                  )}
+                  {showThemeTip && (
+                    <Tspan t6 style={{ position: 'absolute', top: '30px' }}>
+                      Theme
+                    </Tspan>
                   )}
                 </Button>
               </Flex>

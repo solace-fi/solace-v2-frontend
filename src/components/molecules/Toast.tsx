@@ -31,6 +31,7 @@ import { CopyButton } from './CopyButton'
 /* import utils */
 import { getExplorerItemUrl } from '../../utils/explorer'
 import { useNetwork } from 'wagmi'
+import { HyperLink } from '../atoms/Link'
 
 interface AppToastProps {
   message: string
@@ -122,13 +123,13 @@ export const TransactionToast: React.FC<TransactionToastProps> = ({
       {(txHash || errObj) && (
         <Flex itemsCenter marginAuto gap={10}>
           {txHash && (
-            <a
+            <HyperLink
               href={getExplorerItemUrl(explorerUrl, txHash, ExplorerscanApi.TX)}
               target="_blank"
               rel="noopener noreferrer"
             >
               <Button white>Check on {explorerName}</Button>
-            </a>
+            </HyperLink>
           )}
           {errObj && (
             <CopyButton
