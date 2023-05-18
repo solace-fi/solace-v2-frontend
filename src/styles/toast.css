@@ -3,7 +3,7 @@
 .warn-toast,
 .error-toast {
   --toastify-spinner-color: #150a3d;
-  border-radius: 10px;
+  border-radius: 4px;
   padding: 5px;
   transition: all 0.2s, color 0.2s;
   outline: none;

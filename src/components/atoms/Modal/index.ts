@@ -46,7 +46,7 @@ export const ModalContainer = styled.div<BaseModalProps>`
 export const ModalBase = styled.div<BaseModalProps>`
   margin: auto;
   position: relative;
-  border-radius: 10px;
+  border-radius: 4px;
   padding: 24px;
   background-color: ${({ theme }) => theme.backgroundSurface};
   border: none;

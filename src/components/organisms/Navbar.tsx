@@ -4,7 +4,7 @@ import { MobileNavPanelComponent, TopNav, MobileNavMenu } from '../atoms/Navbar'
 import { Button } from '../atoms/Button'
 import { Flex } from '../atoms/Flex'
 import { StyledMenu, StyledMoon, StyledSun } from '../atoms/Icon'
-import { Network, RouteInfo } from '../../constants/types'
+import { LocalNetwork, RouteInfo } from '../../constants/types'
 import { shortenAddress } from '../../utils'
 import { TabLabelLink, Tdiv } from '../atoms/Text'
 import { UserImage } from '../molecules/UserImage'
@@ -25,7 +25,6 @@ import { Mainnet, NETWORKS } from '@/constants/networks'
 import { StyledNavLink } from '../atoms/Link'
 import { useRouter } from 'next/router'
 import makeBlockie from 'ethereum-blockies-base64'
-import Image from 'next/image'
 
 export function MobileNavPanel(
   props: PropsWithChildren & {
@@ -112,19 +111,26 @@ export function MobileNavbar(
   const dispatch = useAppDispatch()
   const showNetworks = useAppSelector((state) => state.ui.showNetworks)
   const showAccount = useAppSelector((state) => state.ui.showAccount)
+  const defaultLocalChain = useAppSelector(
+    (state) => state.general.defaultLocalChain
+  )
   const [show, setShow] = useState(false)
 
   const { chain } = useNetwork()
   const { address: account } = useAccount()
 
-  const [localChain, setLocalChain] = useState<Network>(Mainnet)
+  const [displayedLocalChain, setDisplayedLocalChain] = useState<LocalNetwork>(
+    Mainnet.local
+  )
 
   useEffect(() => {
     if (chain) {
       const foundNetwork = NETWORKS.find((n) => n.id === chain.id)
-      if (foundNetwork) setLocalChain(foundNetwork)
+      if (foundNetwork) setDisplayedLocalChain(foundNetwork.local)
+    } else {
+      setDisplayedLocalChain(defaultLocalChain)
     }
-  }, [chain])
+  }, [chain, defaultLocalChain])
 
   return (
     <>
@@ -145,15 +151,15 @@ export function MobileNavbar(
               transparent
               p={4}
               outlined
-              style={{ borderRadius: '28px', minWidth: 'unset' }}
+              style={{ borderRadius: '4px', minWidth: 'unset' }}
               onClick={() => dispatch(setShowNetworks(!showNetworks))}
             >
-              {localChain.logo && (
+              {displayedLocalChain.logo && (
                 <img
-                  src={localChain.logo}
+                  src={displayedLocalChain.logo}
                   width={30}
                   height={30}
-                  alt={localChain.name}
+                  alt={displayedLocalChain.name}
                 />
               )}
             </Button>
@@ -163,7 +169,7 @@ export function MobileNavbar(
               transparent
               nohover
               onClick={() => dispatch(setShowAccount(!showAccount))}
-              style={{ borderRadius: '28px', minWidth: 'unset' }}
+              style={{ borderRadius: '4px', minWidth: 'unset' }}
             >
               {account ? (
                 <UserImage width={35} height={35} style={{ margin: 'auto' }}>
@@ -195,6 +201,9 @@ export function FullNavbar(
 
   const showAccount = useAppSelector((state) => state.ui.showAccount)
   const showNetworks = useAppSelector((state) => state.ui.showNetworks)
+  const defaultLocalChain = useAppSelector(
+    (state) => state.general.defaultLocalChain
+  )
   const router = useRouter()
 
   const dispatch = useAppDispatch()
@@ -202,7 +211,9 @@ export function FullNavbar(
   const { chain } = useNetwork()
   const { address: account } = useAccount()
 
-  const [localChain, setLocalChain] = useState<Network>(Mainnet)
+  const [displayedLocalChain, setDisplayedLocalChain] = useState<LocalNetwork>(
+    Mainnet.local
+  )
   const [localAccount, setLocalAccount] = useState<string | undefined>(
     undefined
   )
@@ -210,9 +221,11 @@ export function FullNavbar(
   useEffect(() => {
     if (chain) {
       const foundNetwork = NETWORKS.find((n) => n.id === chain.id)
-      if (foundNetwork) setLocalChain(foundNetwork)
+      if (foundNetwork) setDisplayedLocalChain(foundNetwork.local)
+    } else {
+      setDisplayedLocalChain(defaultLocalChain)
     }
-  }, [chain])
+  }, [chain, defaultLocalChain])
 
   useEffect(() => {
     setLocalAccount(account)
@@ -261,19 +274,19 @@ export function FullNavbar(
               transparent
               outlined
               p={8}
-              style={{ borderRadius: '28px', minWidth: 'unset' }}
+              style={{ borderRadius: '4px', minWidth: 'unset' }}
               onClick={() => dispatch(setShowNetworks(!showNetworks))}
             >
               <Flex>
                 <img
-                  src={localChain.logo}
+                  src={displayedLocalChain.logo}
                   width={30}
                   height={30}
                   style={{ marginRight: '2px' }}
-                  alt={localChain.name}
+                  alt={displayedLocalChain.name}
                 />
                 <Tdiv nowrap autoAlignVertical>
-                  {localChain.name}
+                  {displayedLocalChain.name}
                 </Tdiv>
               </Flex>
             </Button>
@@ -283,7 +296,7 @@ export function FullNavbar(
               transparent
               outlined
               p={8}
-              style={{ borderRadius: '28px', minWidth: 'unset' }}
+              style={{ borderRadius: '4px', minWidth: 'unset' }}
               onClick={() => dispatch(setShowAccount(!showAccount))}
             >
               <Flex between gap={5} itemsCenter>

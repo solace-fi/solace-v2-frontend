@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from 'react'
-// import { useProvider, useNetwork, useCache } from '../../context'
 import { Card } from '../atoms/Card'
 import { Flex } from '../atoms/Flex'
 import { Scrollable } from '../atoms/Scroll'
 import { Tdiv } from '../atoms/Text'
 import ToggleSwitch from '../atoms/ToggleSwitch/ToggleSwitch'
-import { Network } from '../../constants/types'
 import { motion } from 'framer-motion'
 import { variants } from '../../styles/animation-styles'
-import { Chain, useSwitchNetwork, useNetwork } from 'wagmi'
-import { useAppSelector } from '@/store/_hooks'
+import { useSwitchNetwork, useNetwork, useAccount } from 'wagmi'
+import { useAppSelector, useAppDispatch } from '@/store/_hooks'
+import { NETWORKS } from '@/constants/networks'
+import { LocalNetwork } from '@/constants/types'
+import { setDefaultLocalChain } from '@/store/general/generalSlice'
 
 export function NetworkPopupPanel(): JSX.Element {
   const [showTestnets, setShowTestnets] = useState<boolean>(false)
+  const { address: account } = useAccount()
   const { chain } = useNetwork()
 
-  const { chains, switchNetwork } = useSwitchNetwork()
+  const { switchNetwork } = useSwitchNetwork()
   const showNetworks = useAppSelector((state) => state.ui.showNetworks)
+  const dispatch = useAppDispatch()
 
   const adjustedChains = showTestnets
-    ? chains
-    : chains.filter((c) => !c.testnet)
+    ? NETWORKS.map((n) => n.local)
+    : NETWORKS.map((n) => n.local).filter((c) => !c.isTestnet)
 
   useEffect(() => {
     if (chain) setShowTestnets(chain?.testnet ?? false)
@@ -58,17 +61,21 @@ export function NetworkPopupPanel(): JSX.Element {
               </Flex>
               <Scrollable maxMobileHeight={'40vh'}>
                 <Flex col style={{ margin: 'auto' }} gap={10}>
-                  {adjustedChains.map((_chain: Chain) => (
+                  {adjustedChains.map((_chain: LocalNetwork) => (
                     <Card
                       px={20}
                       py={10}
                       canHover
                       key={_chain.name}
-                      onClick={() => switchNetwork?.(_chain.id)}
+                      onClick={() =>
+                        account && switchNetwork
+                          ? switchNetwork?.(_chain.chainId)
+                          : dispatch(setDefaultLocalChain(_chain))
+                      }
                       justifyCenter
-                      info={_chain.id === chain?.id}
+                      info={_chain.chainId === chain?.id}
                     >
-                      <Tdiv t4 bold lightPrimary={_chain.id === chain?.id}>
+                      <Tdiv t4 bold lightPrimary={_chain.chainId === chain?.id}>
                         {_chain.name}
                       </Tdiv>
                     </Card>
@@ -87,13 +94,15 @@ export function NetworkPopupPanelMobile(): JSX.Element {
   const showNetworks = useAppSelector((state) => state.ui.showNetworks)
 
   const [showTestnets, setShowTestnets] = useState<boolean>(false)
+  const { address: account } = useAccount()
   const { chain } = useNetwork()
 
-  const { chains, switchNetwork } = useSwitchNetwork()
+  const { switchNetwork } = useSwitchNetwork()
+  const dispatch = useAppDispatch()
 
   const adjustedChains = showTestnets
-    ? chains
-    : chains.filter((c) => !c.testnet)
+    ? NETWORKS.map((n) => n.local)
+    : NETWORKS.map((n) => n.local).filter((c) => !c.isTestnet)
 
   return (
     <>
@@ -133,17 +142,21 @@ export function NetworkPopupPanelMobile(): JSX.Element {
               </Flex>
               <Scrollable maxMobileHeight={'40vh'}>
                 <Flex col style={{ margin: 'auto' }} gap={10}>
-                  {adjustedChains.map((_chain: Chain) => (
+                  {adjustedChains.map((_chain: LocalNetwork) => (
                     <Card
                       px={20}
                       py={10}
                       canHover
                       key={_chain.name}
-                      onClick={() => switchNetwork?.(_chain.id)}
+                      onClick={() =>
+                        account && switchNetwork
+                          ? switchNetwork?.(_chain.chainId)
+                          : dispatch(setDefaultLocalChain(_chain))
+                      }
                       justifyCenter
-                      info={_chain.id === chain?.id}
+                      info={_chain.chainId === chain?.id}
                     >
-                      <Tdiv t4 bold lightPrimary={_chain.id === chain?.id}>
+                      <Tdiv t4 bold lightPrimary={_chain.chainId === chain?.id}>
                         {_chain.name}
                       </Tdiv>
                     </Card>

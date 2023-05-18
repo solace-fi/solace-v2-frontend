@@ -14,7 +14,7 @@ const CalendarContainer = styled.div`
   margin: auto;
   max-width: 890px;
   height: 330px;
-  border-radius: 10px;
+  border-radius: 4px;
   padding: 5px;
 
   @media screen and (max-width: ${BKPT_MOBILE_END}px) {
@@ -51,7 +51,7 @@ const CalendarContainer = styled.div`
 
     margin: 4px;
     min-width: 54px;
-    border-radius: 10px;
+    border-radius: 4px;
     background-color: ${({ theme }) => theme.backgroundInteractive};
     color: ${({ theme }) => theme.textPrimary};
 

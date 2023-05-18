@@ -93,7 +93,7 @@ const ButtonColorFunc = (props: ButtonProps, theme: any) => {
 export const ButtonAppearanceCss = css<ButtonProps & GeneralProps>`
   outline: none;
   border: none;
-  ${(props) => `border-radius: ${props.radius ?? 100}px;`}
+  ${(props) => `border-radius: ${props.radius ?? 4}px;`}
   transition: all 0.2s, color 0.2s;
   cursor: pointer;
   visibility: ${(props) => (props.hidden ? 'hidden;' : 'visible;')};

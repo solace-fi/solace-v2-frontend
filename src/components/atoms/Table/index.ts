@@ -102,13 +102,13 @@ export const TableData = styled.td<TableProps>`
   ${(props) => props.width && `max-width: ${props.width}px !important`};
   padding: 14px 18px;
   &:first-child {
-    border-radius: 10px 0 0 10px;
+    border-radius: 4px 0 0 4px;
   }
   &:last-child {
-    border-radius: 0 10px 10px 0;
+    border-radius: 0 4px 4px 0;
   }
   &:first-child:last-child {
-    border-radius: 10px;
+    border-radius: 4px;
   }
   overflow: hidden;
   text-overflow: ellipsis;

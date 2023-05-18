@@ -33,55 +33,6 @@ export const WalletList = () => {
             </Flex>
           </Card>
         ))}
-        {/* <Card
-          px={20}
-          py={5}
-          canHover
-          onClick={() => connectWallet(SELECTABLE_WALLETS[0].type)}
-          info={SELECTABLE_WALLETS[0].connector == connector}
-        >
-          <Flex stretch between>
-            <Card transparent p={5}>
-              <img
-                src={SELECTABLE_WALLETS[0].logo}
-                alt={SELECTABLE_WALLETS[0].name}
-                height={32}
-              />
-            </Card>
-            <Card itemsCenter transparent p={5}>
-              <Tdiv
-                t4
-                bold
-                lightPrimary={SELECTABLE_WALLETS[0].connector == connector}
-              >
-                {getConnectionName(SELECTABLE_WALLETS[0].type)}
-              </Tdiv>
-            </Card>
-          </Flex>
-        </Card>
-        {SELECTABLE_WALLETS.filter((w) => w.type != 'INJECTED').map(
-          (wallet) => (
-            <Card
-              px={20}
-              py={5}
-              canHover
-              key={wallet.type}
-              onClick={() => connectWallet(wallet.type)}
-              info={wallet.connector == connector}
-            >
-              <Flex stretch between>
-                <Card transparent p={5}>
-                  <img src={wallet.logo} alt={wallet.name} height={32} />
-                </Card>
-                <Card itemsCenter transparent p={5}>
-                  <Tdiv t4 bold lightPrimary={wallet.connector == connector}>
-                    {wallet.name}
-                  </Tdiv>
-                </Card>
-              </Flex>
-            </Card>
-          )
-        )} */}
       </Flex>
     </>
   )

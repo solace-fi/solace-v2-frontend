@@ -1,22 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { getDarkMode, setDarkMode } from '../darkMode'
+import { setDarkMode } from '../darkMode'
+import { LocalNetwork } from '@/constants/types'
+import { Mainnet } from '@/constants/networks'
 
 type InitialState = {
   selectedProvider: string | null
   pathname: string
   appTheme: 'light' | 'dark'
-  positiveVersion: number
-  negativeVersion: number
   minute: number
+  defaultLocalChain: LocalNetwork
 }
 
 const initialState: InitialState = {
   selectedProvider: null,
   pathname: '/',
   appTheme: 'light',
-  positiveVersion: 0,
-  negativeVersion: 0,
   minute: 0,
+  defaultLocalChain: Mainnet.local,
 }
 
 const generalSlice = createSlice({
@@ -33,14 +33,11 @@ const generalSlice = createSlice({
     setPathName: (state, action: PayloadAction<string>) => {
       state.pathname = action.payload
     },
-    incrementPositiveVersion: (state) => {
-      state.positiveVersion += 1
-    },
-    incrementNegativeVersion: (state) => {
-      state.negativeVersion += 1
-    },
     incrementMinute: (state) => {
       state.minute += 1
+    },
+    setDefaultLocalChain: (state, action: PayloadAction<LocalNetwork>) => {
+      state.defaultLocalChain = action.payload
     },
   },
 })
@@ -50,7 +47,6 @@ export const {
   setSelectedProvider,
   toggleDarkTheme,
   setPathName,
-  incrementNegativeVersion,
-  incrementPositiveVersion,
+  setDefaultLocalChain,
   incrementMinute,
 } = generalSlice.actions

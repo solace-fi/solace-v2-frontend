@@ -64,7 +64,7 @@ export const GenericInputSection = ({
     ...style,
     width: w ? w : '100%',
     height: '50px',
-    borderRadius: '100px',
+    borderRadius: '4px',
   }
 
   const gradientStyle = useMemo(
@@ -112,12 +112,12 @@ export const GenericInputSection = ({
       ...inputStyle,
       width: inputWidth ?? '100%',
       borderTopLeftRadius: inputOnMobile
-        ? '100px'
+        ? '4px'
         : canClickFront
         ? '0px'
         : 'inherit',
       borderBottomLeftRadius: inputOnMobile
-        ? '100px'
+        ? '4px'
         : canClickFront
         ? '0px'
         : 'inherit',

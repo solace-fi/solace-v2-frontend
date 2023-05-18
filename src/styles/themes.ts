@@ -153,10 +153,10 @@ export const lightTheme = {
 
 export const darkTheme = {
   ...sharedTheme,
-  background: colors.gray800,
-  backgroundSurface: colors.gray700,
-  backgroundBackdrop: colors.gray950,
-  backgroundInteractive: colors.gray750,
+  background: '#20242A',
+  backgroundSurface: '#3C434E',
+  backgroundBackdrop: '#333942',
+  backgroundInteractive: '#454D59',
   backgroundScrim: opacify(72, colors.gray900),
   backgroundOutline: colors.gray850,
 

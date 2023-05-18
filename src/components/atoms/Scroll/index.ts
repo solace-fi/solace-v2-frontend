@@ -21,7 +21,8 @@ export const ThinScrollbarCss = css`
 `
 
 export const Scrollable = styled.div<ScrollableProps>`
-  max-height: ${(props) => (props.maxDesktopHeight ? props.maxDesktopHeight : `60vh`)};
+  max-height: ${(props) =>
+    props.maxDesktopHeight ? props.maxDesktopHeight : `60vh`};
   overflow-y: auto;
   padding: 10px;
   background-color: ${(props) => css`
@@ -29,9 +30,10 @@ export const Scrollable = styled.div<ScrollableProps>`
   `};
 
   @media screen and (max-width: ${BKPT_MOBILE_END}px) {
-    max-height: ${(props) => (props.maxMobileHeight ? props.maxMobileHeight : `75vh`)};
+    max-height: ${(props) =>
+      props.maxMobileHeight ? props.maxMobileHeight : `75vh`};
   }
-  border-radius: 10px;
+  border-radius: 4px;
   ${GeneralCss}
   ${ThinScrollbarCss}
 `

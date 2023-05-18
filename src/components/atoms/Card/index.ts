@@ -18,12 +18,14 @@ interface CardProps extends ClickProps, FlexProps {
 }
 
 const CardCss = css<CardProps>`
-  border-radius: 36px;
+  border-radius: 4px;
   padding: 24px;
   background: ${({ theme }) => theme.backgroundSurface};
   transition: all 0.2s ease-in-out;
-  ${(props) => props.outlined && `border: 1px solid ${props.theme.backgroundOutline};`}
-  ${(props) => props.interactiveBg && `background: ${props.theme.backgroundInteractive};`}
+  ${(props) =>
+    props.outlined && `border: 1px solid ${props.theme.backgroundOutline};`}
+  ${(props) =>
+    props.interactiveBg && `background: ${props.theme.backgroundInteractive};`}
   ${(props) => props.success && `background: ${props.theme.accentSuccess};`}
   ${(props) => props.info && `background: ${props.theme.accentAction};`}
   ${(props) => props.warning && `background: ${props.theme.accentWarning};`}

@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Accordion } from '@/components/atoms/Accordion'
 import { HorizontalSeparator } from '@/components/atoms/Break'
 import { Button } from '@/components/atoms/Button'
-import { Card } from '@/components/atoms/Card'
+import { Card, CardContainer } from '@/components/atoms/Card'
 import { Flex } from '@/components/atoms/Flex'
 import { Scrollable } from '@/components/atoms/Scroll'
 import {
@@ -30,9 +30,8 @@ import { ReadToken } from '../constants/types'
 import { variants } from '../styles/animation-styles'
 import { fixed, formatAmount } from '../utils'
 import { useAppSelector } from '@/store/_hooks'
-import { Chain, mainnet, useAccount, useNetwork } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { useToast } from '@/hooks/useToast'
-import { toast } from 'react-toastify'
 
 const testTokens: ReadToken[] = [
   {
@@ -58,6 +57,9 @@ const testTokens: ReadToken[] = [
 
 export default function Home(): JSX.Element {
   const appTheme = useAppSelector((state) => state.general.appTheme)
+  const defaultLocalChain = useAppSelector(
+    (state) => state.general.defaultLocalChain
+  )
 
   const [openAccordion, setOpenAccordion] = useState(false)
   const [d1, setD1] = useState(false)
@@ -75,15 +77,10 @@ export default function Home(): JSX.Element {
   const block = useAppSelector((state) => state.provider.latestBlock)
   const { chain } = useNetwork()
   const { address: account } = useAccount()
-  const [localChain, setLocalChain] = useState<Chain>(mainnet)
   const [localAccount, setLocalAccount] = useState<string | undefined>()
 
   const { makeTxToast } = useToast()
 
-  useEffect(() => {
-    if (!chain) return
-    setLocalChain(chain)
-  }, [chain])
   useEffect(() => {
     setLocalAccount(account)
   }, [account])
@@ -157,13 +154,37 @@ export default function Home(): JSX.Element {
       exit="exit"
       transition={{ duration: 0.2 }}
     >
+      <Card>
+        <Tdiv primary>
+          I am a card component, but in this case, I also function as a banner!
+        </Tdiv>
+      </Card>
       <Tdiv primary>{selectedProvider?.toString()}</Tdiv>
       <Tdiv primary>minutes passed: {minute}</Tdiv>
       <Tdiv primary>blocknumber: {block.number.toString()}</Tdiv>
-      <Tdiv primary>web3 chainId: {localChain.id}</Tdiv>
-      <Tdiv primary>explorer: {localChain.blockExplorers?.default.url}</Tdiv>
+      <Tdiv primary>local chainId: {defaultLocalChain.chainId}</Tdiv>
+      <Tdiv primary>local explorer: {defaultLocalChain.explorer.url}</Tdiv>
+      <Tdiv primary>web3 chainId: {chain?.id}</Tdiv>
+      <Tdiv primary>web3 explorer: {chain?.blockExplorers?.default.url}</Tdiv>
       <Tdiv primary>web3 account: {localAccount}</Tdiv>
       <Flex col itemsCenter gap={10}>
+        <CardContainer>
+          <Card>
+            <Tdiv primary>I am nested card 1</Tdiv>
+          </Card>
+          <Card>
+            <Tdiv primary>I am nested card 2</Tdiv>
+          </Card>
+          <Card>
+            <Tdiv primary>I am nested card 3</Tdiv>
+          </Card>
+        </CardContainer>
+        <Card interactiveBg>
+          <Tdiv primary>
+            I am a card with a different background color to let the user know
+            they can interact with me!
+          </Tdiv>
+        </Card>
         <Flex gap={10}>
           <Button big success onClick={successToast}>
             create successful toast
@@ -248,37 +269,37 @@ export default function Home(): JSX.Element {
             </Button>
             <Accordion isOpen={openAccordion} customHeight={'30vh'}>
               <Flex col p={10} gap={10}>
-                <Card>
+                <Card interactiveBg>
                   <Tdiv>I am inside the accordion</Tdiv>
                 </Card>
-                <Card>
+                <Card interactiveBg>
                   <Tdiv>I am inside the accordion</Tdiv>
                 </Card>
-                <Card>
+                <Card interactiveBg>
                   <Tdiv>I am inside the accordion</Tdiv>
                 </Card>
-                <Card>
+                <Card interactiveBg>
                   <Tdiv>I am inside the accordion</Tdiv>
                 </Card>
-                <Card>
+                <Card interactiveBg>
                   <Tdiv>I am inside the accordion</Tdiv>
                 </Card>
-                <Card>
+                <Card interactiveBg>
                   <Tdiv>I am inside the accordion</Tdiv>
                 </Card>
-                <Card>
+                <Card interactiveBg>
                   <Tdiv>I am inside the accordion</Tdiv>
                 </Card>
-                <Card>
+                <Card interactiveBg>
                   <Tdiv>I am inside the accordion</Tdiv>
                 </Card>
-                <Card>
+                <Card interactiveBg>
                   <Tdiv>I am inside the accordion</Tdiv>
                 </Card>
-                <Card>
+                <Card interactiveBg>
                   <Tdiv>I am inside the accordion</Tdiv>
                 </Card>
-                <Card>
+                <Card interactiveBg>
                   <Tdiv>I am inside the accordion</Tdiv>
                 </Card>
               </Flex>

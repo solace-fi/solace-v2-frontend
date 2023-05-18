@@ -1,7 +1,11 @@
 import { Chain } from 'viem'
 import { ContractSources } from '.'
 
-export type Network = Chain & {
+export type Network = Chain & { local: LocalNetwork }
+
+export type LocalNetwork = {
+  name: string
+  chainId: number
   supportedTxTypes: number[]
   logo: string
   isTestnet: boolean

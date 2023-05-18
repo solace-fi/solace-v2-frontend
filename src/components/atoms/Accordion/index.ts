@@ -15,7 +15,8 @@ type AccordionProps = GeneralProps & {
 
 export const Accordion = styled.div<AccordionProps>`
   ${GeneralCss}
-  max-height: ${(props) => (props.isOpen ? props.customHeight ?? '70vh' : '0vh')};
+  max-height: ${(props) =>
+    props.isOpen ? props.customHeight ?? '70vh' : '0vh'};
   transition: max-height
     ${(props) => {
       if (props.isOpen) {
@@ -26,7 +27,9 @@ export const Accordion = styled.div<AccordionProps>`
     }}ms
     ease;
   color: 'auto';
-  ${(props) => !props.noBackgroundColor && `background-color: ${props.theme.backgroundBackdrop};`}
+  ${(props) =>
+    !props.noBackgroundColor &&
+    `background-color: ${props.theme.backgroundBackdrop};`}
   overflow-y: hidden;
   ${(props) => (props.noScroll ? null : `overflow-y: auto;`)}
   ${(props) => (props.thinScrollbar ? ThinScrollbarCss : null)}
@@ -40,5 +43,5 @@ export const Accordion = styled.div<AccordionProps>`
           scrollbar-width: none;
           -ms-overflow-style: none;
         `}
-  border-radius: 10px;
+  border-radius: 4px;
 `
