@@ -11,12 +11,41 @@ export const StyledInput = styled.input`
 
   &:focus,
   &:hover {
-    border-color: ${({ theme }: { theme: Theme }) => theme.backgroundInteractive} !important;
+    border-color: ${({ theme }: { theme: Theme }) =>
+      theme.backgroundInteractive} !important;
     filter: brightness(120%);
   }
 `
 
-export const StyledGenericIconAndText = styled.div<{ disabled?: boolean; width?: number }>`
+export const SmallerInputSection = styled.input<{ theme: Theme }>`
+  border-color: ${({ theme }: { theme: Theme }) =>
+    theme.backgroundOutline} !important;
+  width: 100%;
+  height: 36px !important;
+  border-radius: 8px !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  padding: 6px 16px !important;
+  font-size: 12px !important;
+  font-family: 'Open Sans', sans-serif !important;
+  box-sizing: border-box !important;
+  color: ${({ theme }: { theme: Theme }) => theme.textPrimary} !important;
+  background-color: ${({ theme }: { theme: Theme }) =>
+    theme.backgroundInteractive} !important;
+  outline: none !important;
+  transition: all 0.2s ease-in-out;
+  &:focus,
+  &:hover {
+    border-color: ${({ theme }: { theme: Theme }) =>
+      theme.backgroundOutline} !important;
+    filter: brightness(120%);
+  }
+`
+
+export const StyledGenericIconAndText = styled.div<{
+  disabled?: boolean
+  width?: number
+}>`
   padding: 10px;
   display: flex;
   align-items: center;
@@ -60,7 +89,8 @@ export const Search = styled.input`
     height: 1em;
     width: 1em;
     border-radius: 50em;
-    background: url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg) no-repeat 50% 50%;
+    background: url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg)
+      no-repeat 50% 50%;
     background-size: contain;
     opacity: 0;
     pointer-events: none;
@@ -77,7 +107,11 @@ export const Search = styled.input`
   font-family: 'Open Sans', sans-serif;
 `
 
-export const StyledSlider = styled(Slider)<{ disabled?: boolean; theme?: any; custom1?: boolean }>`
+export const StyledSlider = styled(Slider)<{
+  disabled?: boolean
+  theme?: any
+  custom1?: boolean
+}>`
   background-color: ${({ theme }) => theme.input.slider_color} !important;
   color: ${({ theme }) => theme.input.slider_node_color} !important;
   ${({ disabled }) =>
@@ -103,7 +137,8 @@ export const StyledSlider = styled(Slider)<{ disabled?: boolean; theme?: any; cu
           width: 8px;
           height: 8px;
           border-radius: 50%;
-          background-color: ${({ theme }) => theme.backgroundInteractive} !important;
+          background-color: ${({ theme }) =>
+            theme.backgroundInteractive} !important;
           cursor: pointer;
           border: 1px solid ${({ theme }) => theme.accentAction} !important;
         }
@@ -111,7 +146,8 @@ export const StyledSlider = styled(Slider)<{ disabled?: boolean; theme?: any; cu
           width: 8px;
           height: 8px;
           border-radius: 50%;
-          background-color: ${({ theme }) => theme.backgroundInteractive} !important;
+          background-color: ${({ theme }) =>
+            theme.backgroundInteractive} !important;
           cursor: pointer;
           border: 1px solid ${({ theme }) => theme.accentAction} !important;
         }
@@ -119,7 +155,8 @@ export const StyledSlider = styled(Slider)<{ disabled?: boolean; theme?: any; cu
           width: 8px;
           height: 8px;
           border-radius: 50%;
-          background-color: ${({ theme }) => theme.backgroundInteractive} !important;
+          background-color: ${({ theme }) =>
+            theme.backgroundInteractive} !important;
           cursor: pointer;
           border: 1px solid ${({ theme }) => theme.accentAction} !important;
         }

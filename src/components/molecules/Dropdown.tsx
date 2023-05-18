@@ -15,7 +15,6 @@ import { Card } from '../atoms/Card'
 import { useWindowDimensions } from '../../hooks/internal/useWindowDimensions'
 import { useAppSelector } from '@/store/_hooks'
 import { formatUnits } from 'viem'
-import Image from 'next/image'
 
 export const GenericInputSection = ({
   hasArrow,

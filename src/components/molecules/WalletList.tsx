@@ -1,11 +1,7 @@
-import React, { useCallback } from 'react'
-// import { useWallet } from '../../context'
-// import { CONNECTION_TYPE_TO_CONNECTION, SELECTABLE_WALLETS } from '../../wallet'
+import React from 'react'
 import { Card } from '../atoms/Card'
 import { Flex } from '../atoms/Flex'
 import { Tdiv } from '../atoms/Text'
-// import { getConnectionName } from '../../wallet'
-// import { useWeb3React } from '@web3-react/core'
 import { useAccount, useConnect } from 'wagmi'
 
 export const WalletList = () => {

@@ -26,14 +26,13 @@ import { TransactionCondition } from '../../constants/enums'
 import { Button } from '../atoms/Button'
 import { Flex } from '../atoms/Flex'
 import { Tdiv } from '../atoms/Text'
-import { CopyButton } from './CopyButton'
+import { HyperLink } from '../atoms/Link'
+import { StyledCheckmark, StyledCopy } from '../atoms/Icon'
 
 /* import utils */
 import { getExplorerItemUrl } from '../../utils/explorer'
 import { mainnet, useNetwork } from 'wagmi'
-import { HyperLink } from '../atoms/Link'
 import useCopyClipboard from '@/hooks/internal/useCopyToClipboard'
-import { StyledCheckmark, StyledCopy } from '../atoms/Icon'
 
 interface AppToastProps {
   message: string

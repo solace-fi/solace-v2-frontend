@@ -1,30 +1,21 @@
-import React, { Fragment, use, useEffect, useRef, useState } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { PropsWithChildren } from 'react'
 import { MobileNavPanelComponent, TopNav, MobileNavMenu } from '../atoms/Navbar'
 import { Button } from '../atoms/Button'
 import { Flex } from '../atoms/Flex'
 import { StyledMenu, StyledMoon, StyledSun } from '../atoms/Icon'
-import { LocalNetwork, RouteInfo } from '../../constants/types'
-import { shortenAddress } from '../../utils'
+import { RouteInfo } from '../../constants/types'
 import { TabLabelLink, Tdiv } from '../atoms/Text'
-import { UserImage } from '../molecules/UserImage'
 import { Logo } from '../molecules/Logo'
 import { VerticalSeparator } from '../atoms/Break'
 import { useWindowDimensions } from '../../hooks/internal/useWindowDimensions'
 import { CloseButton } from '../molecules/Modal'
 import { Card } from '../atoms/Card'
-import { AccountPopupPanel, AccountPopupPanelMobile } from './AccountPopupPanel'
-import { useOnClickOutside } from '../../hooks/internal/useOnClickOutside'
-import { NetworkPopupPanel, NetworkPopupPanelMobile } from './NetworkPopupNanel'
-import { useAppDispatch, useAppSelector } from '@/store/_hooks'
+import { useAppSelector } from '@/store/_hooks'
 import { toggleDarkTheme } from '@/store/general/generalSlice'
-import { useAccount, useEnsName, useNetwork } from 'wagmi'
-import { useDispatch } from 'react-redux'
-import { setShowAccount, setShowNetworks } from '@/store/ui/uiSlice'
-import { Mainnet, NETWORKS } from '@/constants/networks'
 import { StyledNavLink } from '../atoms/Link'
 import { useRouter } from 'next/router'
-import makeBlockie from 'ethereum-blockies-base64'
+import { CustomConnectModule } from './CustomConnectModule'
 
 export function MobileNavPanel(
   props: PropsWithChildren & {
@@ -104,33 +95,9 @@ export function MobileNavPanel(
 export function MobileNavbar(
   props: PropsWithChildren & {
     routeInfoArr: RouteInfo[]
-    accountButtonRef: React.RefObject<HTMLDivElement>
-    networkButtonRef: React.RefObject<HTMLDivElement>
   }
 ): JSX.Element {
-  const dispatch = useAppDispatch()
-  const showNetworks = useAppSelector((state) => state.ui.showNetworks)
-  const showAccount = useAppSelector((state) => state.ui.showAccount)
-  const defaultLocalChain = useAppSelector(
-    (state) => state.general.defaultLocalChain
-  )
   const [show, setShow] = useState(false)
-
-  const { chain } = useNetwork()
-  const { address: account } = useAccount()
-
-  const [displayedLocalChain, setDisplayedLocalChain] = useState<LocalNetwork>(
-    Mainnet.local
-  )
-
-  useEffect(() => {
-    if (chain) {
-      const foundNetwork = NETWORKS.find((n) => n.id === chain.id)
-      if (foundNetwork) setDisplayedLocalChain(foundNetwork.local)
-    } else {
-      setDisplayedLocalChain(defaultLocalChain)
-    }
-  }, [chain, defaultLocalChain])
 
   return (
     <>
@@ -139,51 +106,13 @@ export function MobileNavbar(
         setShow={setShow}
         routeInfoArr={props.routeInfoArr}
       />
-      <Flex between>
+      <Flex between pr={20}>
         <Button transparent nohover onClick={() => setShow(!show)}>
           <Tdiv primary>
             <StyledMenu size={40} />
           </Tdiv>
         </Button>
-        <Flex gap={10} pr={20}>
-          <span ref={props.networkButtonRef}>
-            <Button
-              transparent
-              p={4}
-              outlined
-              style={{ borderRadius: '4px', minWidth: 'unset' }}
-              onClick={() => dispatch(setShowNetworks(!showNetworks))}
-            >
-              {displayedLocalChain.logo && (
-                <img
-                  src={displayedLocalChain.logo}
-                  width={30}
-                  height={30}
-                  alt={displayedLocalChain.name}
-                />
-              )}
-            </Button>
-          </span>
-          <span ref={props.accountButtonRef}>
-            <Button
-              transparent
-              nohover
-              onClick={() => dispatch(setShowAccount(!showAccount))}
-              style={{ borderRadius: '4px', minWidth: 'unset' }}
-            >
-              {account ? (
-                <UserImage width={35} height={35} style={{ margin: 'auto' }}>
-                  <img src={makeBlockie(account)} alt={'account'} />
-                </UserImage>
-              ) : (
-                <img
-                  src="/assets/svg/unconnected_user.svg"
-                  alt={'unconnected user'}
-                />
-              )}
-            </Button>
-          </span>
-        </Flex>
+        <CustomConnectModule />
       </Flex>
     </>
   )
@@ -192,60 +121,13 @@ export function MobileNavbar(
 export function FullNavbar(
   props: PropsWithChildren & {
     routeInfoArr: RouteInfo[]
-    accountButtonRef: React.RefObject<HTMLDivElement>
-    networkButtonRef: React.RefObject<HTMLDivElement>
   }
 ): JSX.Element {
-  const [scrollPosition, setScrollPosition] = useState(0)
-  const { data: ensName } = useEnsName()
-
-  const showAccount = useAppSelector((state) => state.ui.showAccount)
-  const showNetworks = useAppSelector((state) => state.ui.showNetworks)
-  const defaultLocalChain = useAppSelector(
-    (state) => state.general.defaultLocalChain
-  )
   const router = useRouter()
-
-  const dispatch = useAppDispatch()
-
-  const { chain } = useNetwork()
-  const { address: account } = useAccount()
-
-  const [displayedLocalChain, setDisplayedLocalChain] = useState<LocalNetwork>(
-    Mainnet.local
-  )
-  const [localAccount, setLocalAccount] = useState<string | undefined>(
-    undefined
-  )
-
-  useEffect(() => {
-    if (chain) {
-      const foundNetwork = NETWORKS.find((n) => n.id === chain.id)
-      if (foundNetwork) setDisplayedLocalChain(foundNetwork.local)
-    } else {
-      setDisplayedLocalChain(defaultLocalChain)
-    }
-  }, [chain, defaultLocalChain])
-
-  useEffect(() => {
-    setLocalAccount(account)
-  }, [account])
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const position = window.pageYOffset
-      setScrollPosition(position)
-    }
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
 
   return (
     <>
-      <Flex stretch between px={20}>
+      <Flex between px={20}>
         <Flex gap={20} itemsCenter>
           <Logo location={router} />
           <Flex gap={20}>
@@ -268,64 +150,7 @@ export function FullNavbar(
             ))}
           </Flex>
         </Flex>
-        <Flex gap={10} itemsCenter>
-          <span ref={props.networkButtonRef}>
-            <Button
-              transparent
-              outlined
-              p={8}
-              style={{ borderRadius: '4px', minWidth: 'unset' }}
-              onClick={() => dispatch(setShowNetworks(!showNetworks))}
-            >
-              <Flex>
-                <img
-                  src={displayedLocalChain.logo}
-                  width={30}
-                  height={30}
-                  style={{ marginRight: '2px' }}
-                  alt={displayedLocalChain.name}
-                />
-                <Tdiv nowrap autoAlignVertical>
-                  {displayedLocalChain.name}
-                </Tdiv>
-              </Flex>
-            </Button>
-          </span>
-          <span ref={props.accountButtonRef}>
-            <Button
-              transparent
-              outlined
-              p={8}
-              style={{ borderRadius: '4px', minWidth: 'unset' }}
-              onClick={() => dispatch(setShowAccount(!showAccount))}
-            >
-              <Flex between gap={5} itemsCenter>
-                {localAccount ? (
-                  <UserImage width={30} height={30} style={{ margin: 'auto' }}>
-                    <img src={makeBlockie(localAccount)} alt={'account'} />
-                  </UserImage>
-                ) : (
-                  <img
-                    src="/assets/svg/unconnected_user.svg"
-                    alt={'unconnected user'}
-                  />
-                )}
-                {scrollPosition <= 40 &&
-                  (localAccount ? (
-                    <Flex col around>
-                      <Tdiv textAlign="left" t4>
-                        {ensName ?? shortenAddress(localAccount)}
-                      </Tdiv>
-                    </Flex>
-                  ) : (
-                    <Flex col around>
-                      <Tdiv textAlign="left">Not connected</Tdiv>
-                    </Flex>
-                  ))}
-              </Flex>
-            </Button>
-          </span>
-        </Flex>
+        <CustomConnectModule />
       </Flex>
     </>
   )
@@ -334,62 +159,20 @@ export function FullNavbar(
 export function Navbar(
   props: PropsWithChildren & { routeInfoArr: RouteInfo[] }
 ): JSX.Element {
-  const showAccount = useAppSelector((state) => state.ui.showAccount)
-  const showNetworks = useAppSelector((state) => state.ui.showNetworks)
-
-  const dispatch = useDispatch()
-
   const { isTablet, isMobile } = useWindowDimensions()
 
-  const accountButtonRef = useRef<HTMLDivElement>(null)
-  const networkButtonRef = useRef<HTMLDivElement>(null)
-  const accountPanelRef = useRef<HTMLDivElement>(null)
-  const networkPanelRef = useRef<HTMLDivElement>(null)
-
-  const [isMobileLocal, setIsMobileLocal] = useState<boolean>(false)
-
   const [displaySmallNavbar, setDisplaySmallNavbar] = useState<boolean>(false)
-
-  useOnClickOutside(
-    accountButtonRef,
-    showAccount ? () => dispatch(setShowAccount(false)) : undefined,
-    [accountPanelRef]
-  )
-
-  useOnClickOutside(
-    networkButtonRef,
-    showNetworks ? () => dispatch(setShowNetworks(false)) : undefined,
-    [networkPanelRef]
-  )
 
   useEffect(() => {
     setDisplaySmallNavbar(isTablet || isMobile)
   }, [isTablet, isMobile])
 
-  useEffect(() => {
-    setIsMobileLocal(isMobile)
-  }, [isMobile])
-
   return (
     <TopNav>
-      <span ref={accountPanelRef}>
-        {!isMobileLocal ? <AccountPopupPanel /> : <AccountPopupPanelMobile />}
-      </span>
-      <span ref={networkPanelRef}>
-        {!isMobileLocal ? <NetworkPopupPanel /> : <NetworkPopupPanelMobile />}
-      </span>
       {displaySmallNavbar ? (
-        <MobileNavbar
-          routeInfoArr={props.routeInfoArr}
-          accountButtonRef={accountButtonRef}
-          networkButtonRef={networkButtonRef}
-        />
+        <MobileNavbar routeInfoArr={props.routeInfoArr} />
       ) : (
-        <FullNavbar
-          routeInfoArr={props.routeInfoArr}
-          accountButtonRef={accountButtonRef}
-          networkButtonRef={networkButtonRef}
-        />
+        <FullNavbar routeInfoArr={props.routeInfoArr} />
       )}
     </TopNav>
   )

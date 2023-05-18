@@ -17,13 +17,13 @@ import {
 } from '@/components/atoms/Table'
 import { Tdiv } from '@/components/atoms/Text'
 import { CheckboxOption } from '@/components/molecules/CheckboxOption'
-import { SmallerInputSection } from '@/components/molecules/InputSection'
+import { SmallerInputSection } from '@/components/atoms/Input'
 import { StyledTooltip } from '@/components/molecules/Tooltip'
 import { CalendarModal } from '@/components/organisms/CalendarModal'
 import {
   BalanceDropdownOptions,
   GenericInputSection,
-} from '@/components/organisms/Dropdown'
+} from '@/components/molecules/Dropdown'
 import { Z_TABLE } from '../constants'
 import { TransactionCondition } from '../constants/enums'
 import { ReadToken } from '../constants/types'

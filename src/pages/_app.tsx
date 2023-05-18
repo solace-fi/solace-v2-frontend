@@ -9,10 +9,6 @@ import ToastUpdater from '../store/toast/toastUpdater'
 
 import { WagmiConfig, configureChains, createConfig } from 'wagmi'
 import { Goerli, Aurora, Mainnet, Fantom, Polygon } from '@/constants/networks'
-// import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { LedgerConnector } from 'wagmi/connectors/ledger'
 import { publicProvider } from 'wagmi/providers/public'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
@@ -25,7 +21,7 @@ import { ThemeProvider } from 'styled-components'
 import { GlobalStyle, Layout } from '@/components/atoms/Layout'
 import { ToastContainer } from 'react-toastify'
 import { lightTheme, darkTheme } from '../styles/themes'
-import { RouteInfo } from '@/constants/types'
+import { Network, RouteInfo } from '@/constants/types'
 import { Navbar } from '@/components/organisms/Navbar'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -38,6 +34,36 @@ import '../styles/index.css'
 import 'react-toastify/dist/ReactToastify.css'
 import '../styles/toast.css'
 import { Flex } from '@/components/atoms/Flex'
+
+import '@rainbow-me/rainbowkit/styles.css'
+import {
+  AvatarComponent,
+  getDefaultWallets,
+  RainbowKitProvider,
+  darkTheme as raindowDarkTheme,
+} from '@rainbow-me/rainbowkit'
+import makeBlockie from 'ethereum-blockies-base64'
+import { UserImage } from '@/components/molecules/UserImage'
+import { CustomAvatar } from '@/components/molecules/CustomAvatar'
+
+const routeInfoArr: RouteInfo[] = [
+  {
+    name: 'Playground',
+    title: 'Playground',
+    to: 'playground',
+  },
+  {
+    name: 'Risk Market',
+    title: 'Risk Market',
+    to: '',
+    // children: ['/pool'],
+  },
+  {
+    name: 'Dashboard',
+    title: 'Dashboard',
+    to: 'dashboard',
+  },
+]
 
 function Updaters() {
   return (
@@ -64,58 +90,37 @@ export default function App({ Component, pageProps }: AppProps) {
     ]
   )
 
-  const wagmiConfig = createConfig({
-    autoConnect: true,
-    publicClient,
-    webSocketPublicClient,
-    connectors: [
-      new InjectedConnector({ chains }),
-      // new WalletConnectConnector({
-      //   chains,
-      //   options: {
-      //     projectId: '...',
-      //   },
-      // }),
-      new LedgerConnector({ chains }),
-      new CoinbaseWalletConnector({ chains, options: { appName: 'wagmi.sh' } }),
-    ],
+  const { connectors } = getDefaultWallets({
+    appName: 'Solace',
+    projectId: 'SOLACE_V2',
+    chains,
   })
 
-  const routeInfoArr: RouteInfo[] = [
-    {
-      name: 'Playground',
-      title: 'Playground',
-      to: 'playground',
-    },
-    {
-      name: 'Risk Market',
-      title: 'Risk Market',
-      to: '',
-      // children: ['/pool'],
-    },
-    {
-      name: 'Dashboard',
-      title: 'Dashboard',
-      to: 'dashboard',
-    },
-  ]
+  const wagmiConfig = createConfig({
+    autoConnect: true,
+    connectors,
+    publicClient,
+    webSocketPublicClient,
+  })
 
   return (
     <Provider store={store}>
       <WagmiConfig config={wagmiConfig}>
         <Updaters />
-        <DarkModeProvider>
-          <StyledThemeProvider>
-            <Navbar routeInfoArr={routeInfoArr} />
-            <Layout>
-              <AnimatePresence mode="wait" initial={false}>
-                <GlobalStyle key={'_globalStyle'} />
-                <Component {...pageProps} />
-              </AnimatePresence>
-              <ToastContainer />
-            </Layout>
-          </StyledThemeProvider>
-        </DarkModeProvider>
+        <CustomRainbowKitProvider chains={chains}>
+          <DarkModeProvider>
+            <StyledThemeProvider>
+              <Navbar routeInfoArr={routeInfoArr} />
+              <Layout>
+                <AnimatePresence mode="wait" initial={false}>
+                  <GlobalStyle key={'_globalStyle'} />
+                  <Component {...pageProps} />
+                </AnimatePresence>
+                <ToastContainer />
+              </Layout>
+            </StyledThemeProvider>
+          </DarkModeProvider>
+        </CustomRainbowKitProvider>
       </WagmiConfig>
     </Provider>
   )
@@ -165,5 +170,25 @@ function StyledThemeProvider({ children }: { children: ReactNode }) {
         </Flex>
       )}
     </ThemeProvider>
+  )
+}
+
+function CustomRainbowKitProvider({
+  chains,
+  children,
+}: {
+  chains: any[]
+  children: ReactNode
+}) {
+  return (
+    <RainbowKitProvider
+      showRecentTransactions={true}
+      modalSize="compact"
+      theme={raindowDarkTheme()}
+      chains={chains}
+      avatar={CustomAvatar}
+    >
+      {children}
+    </RainbowKitProvider>
   )
 }
