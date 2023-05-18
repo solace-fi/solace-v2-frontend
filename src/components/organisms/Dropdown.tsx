@@ -244,7 +244,7 @@ export const DropdownOptions = ({
             <Flex stretch gap={12}>
               <Flex gap={8} itemsCenter>
                 {item.iconUrl ? (
-                  <Image src={item.iconUrl} height={24} alt={item.iconUrl} />
+                  <img src={item.iconUrl} height={24} alt={item.iconUrl} />
                 ) : (
                   <Tdiv {...gradientStyle}>{item.label}</Tdiv>
                 )}
@@ -312,7 +312,7 @@ export const BalanceDropdownOptions = ({
           >
             <Flex stretch between pl={16} pr={16}>
               <Flex gap={8} itemsCenter>
-                <Image
+                <img
                   src={`https://assets.solace.fi/${item.name.toLowerCase()}`}
                   width={16}
                   height={16}

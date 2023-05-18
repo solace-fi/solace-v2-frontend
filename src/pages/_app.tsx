@@ -33,8 +33,6 @@ import { getDarkMode } from '../store/darkMode'
 import { toggleDarkTheme } from '../store/general/generalSlice'
 import { useAppDispatch } from '../store/_hooks'
 import { setShowApp } from '@/store/ui/uiSlice'
-import Image from 'next/image'
-import Spinner from '../assets/svg/colored_spinner.svg'
 
 import '../styles/index.css'
 import 'react-toastify/dist/ReactToastify.css'
@@ -157,7 +155,12 @@ function StyledThemeProvider({ children }: { children: ReactNode }) {
           style={{ height: '100vh', width: '100%', backgroundColor: '#000' }}
         >
           <div style={{ width: '200px', height: '200px' }}>
-            <Image src={Spinner} alt={'loading'} width={200} height={200} />
+            <img
+              src="/assets/svg/colored_spinner.svg"
+              alt={'loading'}
+              width={200}
+              height={200}
+            />
           </div>
         </Flex>
       )}

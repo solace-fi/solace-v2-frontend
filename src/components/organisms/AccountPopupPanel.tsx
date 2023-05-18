@@ -74,12 +74,7 @@ export function AccountPopupPanel(): JSX.Element {
               {account && (
                 <Flex itemsCenter gap={5} mb={20} justifyCenter>
                   <UserImage width={25} height={25}>
-                    <Image
-                      src={makeBlockie(account)}
-                      alt={'account'}
-                      width={25}
-                      height={25}
-                    />
+                    <img src={makeBlockie(account)} alt={'account'} />
                   </UserImage>
                   <Tdiv t4 semibold>
                     {name ?? shortenAddress(account)}
@@ -277,12 +272,7 @@ export function AccountPopupPanelMobile(): JSX.Element {
               {account && (
                 <Flex itemsCenter gap={5} mb={20} justifyCenter>
                   <UserImage width={25} height={25}>
-                    <Image
-                      src={makeBlockie(account)}
-                      alt={'account'}
-                      width={25}
-                      height={25}
-                    />
+                    <img src={makeBlockie(account)} alt={'account'} />
                   </UserImage>
                   <Tdiv t4 semibold>
                     {name ?? shortenAddress(account)}

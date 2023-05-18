@@ -1,4 +1,3 @@
-import EthereumLogo from '../../assets/svg/networks/ethereum-logo.svg'
 import { goerli } from 'wagmi/chains'
 import { Network } from '../types'
 
@@ -6,7 +5,7 @@ export const Goerli: Network = {
   ...goerli,
   supportedTxTypes: [0, 2],
   isTestnet: true,
-  logo: EthereumLogo,
+  logo: '/assets/svg/networks/ethereum-logo.svg',
   explorer: {
     name: 'Etherscan',
     key: '',

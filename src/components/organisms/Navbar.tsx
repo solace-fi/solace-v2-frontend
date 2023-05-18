@@ -11,7 +11,6 @@ import { UserImage } from '../molecules/UserImage'
 import { Logo } from '../molecules/Logo'
 import { VerticalSeparator } from '../atoms/Break'
 import { useWindowDimensions } from '../../hooks/internal/useWindowDimensions'
-import UnconnectedUser from '../../assets/svg/unconnected_user.svg'
 import { CloseButton } from '../molecules/Modal'
 import { Card } from '../atoms/Card'
 import { AccountPopupPanel, AccountPopupPanelMobile } from './AccountPopupPanel'
@@ -150,7 +149,7 @@ export function MobileNavbar(
               onClick={() => dispatch(setShowNetworks(!showNetworks))}
             >
               {localChain.logo && (
-                <Image
+                <img
                   src={localChain.logo}
                   width={30}
                   height={30}
@@ -168,19 +167,12 @@ export function MobileNavbar(
             >
               {account ? (
                 <UserImage width={35} height={35} style={{ margin: 'auto' }}>
-                  <Image
-                    src={makeBlockie(account)}
-                    alt={'account'}
-                    width={35}
-                    height={35}
-                  />
+                  <img src={makeBlockie(account)} alt={'account'} />
                 </UserImage>
               ) : (
-                <Image
-                  src={UnconnectedUser}
+                <img
+                  src="/assets/svg/unconnected_user.svg"
                   alt={'unconnected user'}
-                  width={35}
-                  height={35}
                 />
               )}
             </Button>
@@ -273,7 +265,7 @@ export function FullNavbar(
               onClick={() => dispatch(setShowNetworks(!showNetworks))}
             >
               <Flex>
-                <Image
+                <img
                   src={localChain.logo}
                   width={30}
                   height={30}
@@ -297,19 +289,12 @@ export function FullNavbar(
               <Flex between gap={5} itemsCenter>
                 {localAccount ? (
                   <UserImage width={30} height={30} style={{ margin: 'auto' }}>
-                    <Image
-                      src={makeBlockie(localAccount)}
-                      alt={'account'}
-                      width={30}
-                      height={30}
-                    />
+                    <img src={makeBlockie(localAccount)} alt={'account'} />
                   </UserImage>
                 ) : (
-                  <Image
-                    src={UnconnectedUser}
+                  <img
+                    src="/assets/svg/unconnected_user.svg"
                     alt={'unconnected user'}
-                    width={30}
-                    height={30}
                   />
                 )}
                 {scrollPosition <= 40 &&

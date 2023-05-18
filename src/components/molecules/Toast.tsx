@@ -30,7 +30,7 @@ import { CopyButton } from './CopyButton'
 
 /* import utils */
 import { getExplorerItemUrl } from '../../utils/explorer'
-import { useNetwork } from 'wagmi'
+import { mainnet, useNetwork } from 'wagmi'
 import { HyperLink } from '../atoms/Link'
 import useCopyClipboard from '@/hooks/internal/useCopyToClipboard'
 import { StyledCheckmark, StyledCopy } from '../atoms/Icon'
@@ -64,8 +64,12 @@ export const TransactionToast: React.FC<TransactionToastProps> = ({
   const { chain } = useNetwork()
   const [isCopied, setCopied] = useCopyClipboard()
 
-  const [explorerUrl, setExplorerUrl] = React.useState('')
-  const [explorerName, setExplorerName] = React.useState('')
+  const [explorerUrl, setExplorerUrl] = React.useState<string>(
+    mainnet.blockExplorers.default.url
+  )
+  const [explorerName, setExplorerName] = React.useState<string>(
+    mainnet.blockExplorers.default.name
+  )
 
   useEffect(() => {
     if (

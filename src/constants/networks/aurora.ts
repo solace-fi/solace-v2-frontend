@@ -1,11 +1,10 @@
-import EthereumLogo from '../../assets/svg/networks/ethereum-logo.svg'
 import { aurora } from 'wagmi/chains'
 import { Network } from '../types'
 
 export const Aurora: Network = {
   ...aurora,
   supportedTxTypes: [0, 2],
-  logo: EthereumLogo,
+  logo: '/assets/svg/networks/ethereum-logo.svg',
   isTestnet: false,
   explorer: {
     name: 'Aurorascan',
