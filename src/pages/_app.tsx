@@ -130,7 +130,7 @@ function DarkModeProvider({ children }: { children: ReactNode }) {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(toggleDarkTheme(getDarkMode()))
+    // dispatch(toggleDarkTheme(getDarkMode()))
     const app = setTimeout(() => {
       dispatch(setShowApp(true))
     }, 1000)
