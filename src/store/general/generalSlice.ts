@@ -14,7 +14,7 @@ type InitialState = {
 const initialState: InitialState = {
   selectedProvider: null,
   pathname: '/',
-  appTheme: 'light',
+  appTheme: 'dark',
   minute: 0,
   defaultLocalChain: Mainnet.local,
 }
