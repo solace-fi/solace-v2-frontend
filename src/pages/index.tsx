@@ -193,8 +193,8 @@ export default function Home(): JSX.Element {
         chainId: chain?.id ?? defaultLocalChain.chainId,
       },
     ],
-    2,
-    'new 4'
+    1,
+    'randomkey'
   )
 
   const { data: paginatedData, fetchNextPage: fetchNextPaginated } =

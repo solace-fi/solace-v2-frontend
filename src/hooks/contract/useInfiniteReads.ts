@@ -2,6 +2,8 @@
 
 import { paginatedIndexesConfig, useContractInfiniteReads } from 'wagmi'
 
+// https://wagmi.sh/react/hooks/useContractInfiniteReads
+
 /*
   TODO Polish and research more, I'm honestly not that confident in this hook so maybe not use it so much for now
   Ideal for calling multiple different contract functions with the same arguments
