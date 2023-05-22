@@ -36,7 +36,6 @@
     "eslint-config-next": "13.2.3",
     "ethereum-blockies-base64": "^1.0.2",
     "framer-motion": "^10.12.5",
-    "immer": "^10.0.2",
     "next": "^13.4.2",
     "react": "18.2.0",
     "react-calendar": "^4.0.0",
