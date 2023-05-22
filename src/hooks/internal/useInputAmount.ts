@@ -13,13 +13,9 @@ export const useInputAmount = () => {
 
   const isAppropriateAmount = useCallback(
     (amount: string, amountDecimals: number, assetBalance: bigint): boolean => {
-      if (
-        !amount ||
-        amount == '.' ||
-        parseUnits(`${Number(amount)}`, amountDecimals) <= BigInt(0)
-      )
-        return false
-      return assetBalance >= parseUnits(`${Number(amount)}`, amountDecimals)
+      const bigIntAmount = parseUnits(amount as `${number}`, amountDecimals)
+      if (!amount || amount == '.' || bigIntAmount <= BigInt(0)) return false
+      return assetBalance >= bigIntAmount
     },
     []
   )

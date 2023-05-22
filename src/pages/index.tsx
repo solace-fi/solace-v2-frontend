@@ -41,6 +41,7 @@ import {
 import { erc20ABI } from '@wagmi/core'
 import Test from '@/constants/abi/delete-me-later.json'
 import { useInputAmount } from '@/hooks/internal/useInputAmount'
+import { parseUnits } from 'viem'
 
 const testTokens: ReadToken[] = [
   {
@@ -128,7 +129,10 @@ export default function Home(): JSX.Element {
       chainId: chain?.id ?? defaultLocalChain.chainId,
     },
     'approve',
-    ['0x501acE7a18b0F59E51eb198cD73480F8467DE100', amount],
+    [
+      '0x501acE7a18b0F59E51eb198cD73480F8467DE100',
+      parseUnits(amount as `${number}`, 18),
+    ],
     (data) => {
       console.log('write success', data)
       makeTxToast(
@@ -307,7 +311,9 @@ export default function Home(): JSX.Element {
       <Button inquiry onClick={refetchRead}>
         click me to call useRead function again
       </Button>
-      <Button onClick={writeAsync}>click me to call contract function</Button>
+      <Button onClick={writeAsync ? writeAsync() : undefined}>
+        click me to call contract function
+      </Button>
       <Flex col itemsCenter gap={10}>
         <CardContainer>
           <Card>
