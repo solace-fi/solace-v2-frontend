@@ -6,7 +6,8 @@ import { Flex } from '../atoms/Flex'
 import { StyledMenu, StyledMoon, StyledSun } from '../atoms/Icon'
 import { RouteInfo } from '../../constants/types'
 import { TabLabelLink, Tdiv } from '../atoms/Text'
-import { Logo } from '../molecules/Logo'
+// import { Logo } from '../molecules/Logo'
+import { Logo } from '../atoms/Logo/Logo'
 import { VerticalSeparator } from '../atoms/Break'
 import { useWindowDimensions } from '../../hooks/internal/useWindowDimensions'
 import { CloseButton } from '../molecules/Modal'
@@ -129,7 +130,9 @@ export function FullNavbar(
     <>
       <Flex between px={20}>
         <Flex gap={20} itemsCenter>
-          <Logo location={router} />
+          {/* <Logo location={router} /> */}
+          {/* link if not home */}
+          <Logo />
           <Flex gap={20}>
             {props.routeInfoArr.map((page) => (
               <Fragment key={page.to}>

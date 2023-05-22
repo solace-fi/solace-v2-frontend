@@ -15,7 +15,10 @@ export const MobileNavPanelComponent = styled.div<{ shouldShow: boolean }>`
   position: fixed;
   top: 0;
   z-index: ${Z_NAV};
-  ${(props) => (props.shouldShow ? `left: 0%; transition: 350ms;` : `left: -100%; transition: 350ms;`)};
+  ${(props) =>
+    props.shouldShow
+      ? `left: 0%; transition: 350ms;`
+      : `left: -100%; transition: 350ms;`};
 `
 
 export const MobileNavMenu = styled.div`
@@ -29,7 +32,8 @@ export const MobileNavMenu = styled.div`
 export const TopNav = styled.div<TopNavProps>`
   position: fixed;
   overflow: hidden;
-  background-color: ${(props) => props.theme.backgroundInteractive};
+  /* background-color: ${(props) => props.theme.backgroundInteractive}; */
+  background-color: transparent;
   padding: 10px 0;
   transition: 200ms ease;
   display: block;
@@ -37,7 +41,10 @@ export const TopNav = styled.div<TopNavProps>`
   z-index: ${Z_NAV};
 
   @media screen and (max-width: ${BKPT_MOBILE_END}px) {
-    ${(props) => (props.isOpen == false ? 'max-height: 2.5rem;' : 'max-height: calc(100vh - 20px);')}
+    ${(props) =>
+      props.isOpen == false
+        ? 'max-height: 2.5rem;'
+        : 'max-height: calc(100vh - 20px);'}
     text-align: center;
   }
 `
