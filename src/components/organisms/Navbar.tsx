@@ -16,6 +16,7 @@ import { toggleDarkTheme } from '@/store/general/generalSlice'
 import { StyledNavLink } from '../atoms/Link'
 import { useRouter } from 'next/router'
 import { CustomConnectModule } from './CustomConnectModule'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 export function MobileNavPanel(
   props: PropsWithChildren & {
@@ -112,7 +113,7 @@ export function MobileNavbar(
             <StyledMenu size={40} />
           </Tdiv>
         </Button>
-        <CustomConnectModule />
+        <CustomConnectModule mobile />
       </Flex>
     </>
   )

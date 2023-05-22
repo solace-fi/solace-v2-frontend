@@ -184,7 +184,10 @@ function CustomRainbowKitProvider({
     <RainbowKitProvider
       showRecentTransactions={true}
       modalSize="compact"
-      theme={raindowDarkTheme()}
+      theme={raindowDarkTheme({
+        borderRadius: 'small',
+        fontStack: 'system',
+      })}
       chains={chains}
       avatar={CustomAvatar}
     >

@@ -8,21 +8,8 @@ import { useEffect, useState } from 'react'
 import { useEnsName } from 'wagmi'
 import { CustomAvatar } from '../molecules/CustomAvatar'
 
-export const CustomConnectModule = () => {
-  const [scrollPosition, setScrollPosition] = useState(0)
+export const CustomConnectModule = ({ mobile }: { mobile?: boolean }) => {
   const { data: ensName } = useEnsName()
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const position = window.pageYOffset
-      setScrollPosition(position)
-    }
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
 
   return (
     <ConnectButton.Custom>
@@ -71,9 +58,11 @@ export const CustomConnectModule = () => {
                         style={{ marginRight: '2px' }}
                         alt={chain.name}
                       />
-                      <Tdiv nowrap autoAlignVertical>
-                        {chain.name}
-                      </Tdiv>
+                      {!mobile && (
+                        <Tdiv nowrap autoAlignVertical>
+                          {chain.name}
+                        </Tdiv>
+                      )}
                     </Flex>
                   </Button>
                   <Button
@@ -94,18 +83,13 @@ export const CustomConnectModule = () => {
                           size={20}
                         />
                       </UserImage>
-                      {scrollPosition <= 40 &&
-                        (account ? (
-                          <Flex col around>
-                            <Tdiv textAlign="left" t4>
-                              {ensName ?? shortenAddress(account.address)}
-                            </Tdiv>
-                          </Flex>
-                        ) : (
-                          <Flex col around>
-                            <Tdiv textAlign="left">Not connected</Tdiv>
-                          </Flex>
-                        ))}
+                      {!mobile && (
+                        <Flex col around>
+                          <Tdiv textAlign="left" t4>
+                            {ensName ?? shortenAddress(account.address)}
+                          </Tdiv>
+                        </Flex>
+                      )}
                     </Flex>
                   </Button>
                 </Flex>
