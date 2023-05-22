@@ -32,6 +32,8 @@ import { fixed, formatAmount } from '../utils'
 import { useAppSelector } from '@/store/_hooks'
 import { useAccount, useNetwork } from 'wagmi'
 import { useToast } from '@/hooks/useToast'
+import { useRead, useWrite } from '@/hooks/contract'
+import { erc20ABI } from '@wagmi/core'
 
 const testTokens: ReadToken[] = [
   {
@@ -74,12 +76,84 @@ export default function Home(): JSX.Element {
     (state) => state.general.selectedProvider
   )
   const minute = useAppSelector((state) => state.general.minute)
-  const block = useAppSelector((state) => state.provider.latestBlock)
+  // const block = useAppSelector((state) => state.provider.latestBlock) // INFO - get latest block number in real time, but disabled atm because it causes unnecessary rerenders by constantly refreshing data
   const { chain } = useNetwork()
   const { address: account } = useAccount()
   const [localAccount, setLocalAccount] = useState<string | undefined>()
 
   const { makeTxToast } = useToast()
+
+  const {
+    data: readData,
+    isLoading: isReadLoading,
+    refetch: refetchRead,
+  } = useRead<bigint>(
+    {
+      address: '0x6a49238e4d0fA003BA07fbd5ec8B6b045f980574',
+      abi: erc20ABI,
+      chainId: chain?.id ?? defaultLocalChain.chainId,
+    },
+    'name',
+    [],
+    (data) => {
+      console.log('read data', data)
+    },
+    (data) => {
+      console.log('read error', data)
+    }
+  )
+
+  const {
+    writeAsync,
+    writeData,
+    writeError,
+    txData,
+    txError,
+    isTxLoading,
+    isTxSuccess,
+  } = useWrite(
+    {
+      address: '0x6a49238e4d0fA003BA07fbd5ec8B6b045f980574',
+      abi: erc20ABI,
+      chainId: chain?.id ?? defaultLocalChain.chainId,
+    },
+    'approve',
+    ['0x501acE7a18b0F59E51eb198cD73480F8467DE100', inputValue],
+    (data) => {
+      console.log('write success', data)
+      makeTxToast(
+        't',
+        TransactionCondition.PENDING,
+        appTheme,
+        data.hash,
+        data.hash
+      )
+    },
+    (error) => {
+      console.log('write error', error)
+    },
+    (data) => {
+      console.log('tx success', data)
+      makeTxToast(
+        't',
+        TransactionCondition.SUCCESS,
+        appTheme,
+        data.transactionHash,
+        data.transactionHash
+      )
+    },
+    (error) => {
+      console.log('tx error', error)
+      makeTxToast(
+        't',
+        TransactionCondition.FAILURE,
+        appTheme,
+        error.transactionHash,
+        error.transactionHash,
+        error
+      )
+    }
+  )
 
   useEffect(() => {
     setLocalAccount(account)
@@ -161,12 +235,20 @@ export default function Home(): JSX.Element {
       </Card>
       <Tdiv primary>{selectedProvider?.toString()}</Tdiv>
       <Tdiv primary>minutes passed: {minute}</Tdiv>
-      <Tdiv primary>blocknumber: {block.number.toString()}</Tdiv>
+      {/* <Tdiv primary>blocknumber: {block.number.toString()}</Tdiv> */}
       <Tdiv primary>local chainId: {defaultLocalChain.chainId}</Tdiv>
       <Tdiv primary>local explorer: {defaultLocalChain.explorer.url}</Tdiv>
       <Tdiv primary>web3 chainId: {chain?.id}</Tdiv>
       <Tdiv primary>web3 explorer: {chain?.blockExplorers?.default.url}</Tdiv>
       <Tdiv primary>web3 account: {localAccount}</Tdiv>
+      <Tdiv primary>
+        example useRead value:{' '}
+        {isReadLoading ? 'loading' : readData?.toString() ?? 'none'}
+      </Tdiv>
+      <Button inquiry onClick={refetchRead}>
+        click me to call useRead function again
+      </Button>
+      <Button onClick={writeAsync}>click me to call contract function</Button>
       <Flex col itemsCenter gap={10}>
         <CardContainer>
           <Card>
