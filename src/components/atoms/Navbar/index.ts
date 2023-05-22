@@ -32,8 +32,8 @@ export const MobileNavMenu = styled.div`
 export const TopNav = styled.div<TopNavProps>`
   position: fixed;
   overflow: hidden;
-  /* background-color: ${(props) => props.theme.backgroundInteractive}; */
-  background-color: transparent;
+  background-color: ${(props) => props.theme.background};
+  /* background-color: inherit; */
   padding: 10px 0;
   transition: 200ms ease;
   display: block;
