@@ -3,7 +3,7 @@
 import { paginatedIndexesConfig, useContractInfiniteReads } from 'wagmi'
 
 /*
-  TODO Polish and research more 
+  TODO Polish and research more, I'm honestly not that confident in this hook so maybe not use it so much for now
   Ideal for calling multiple different contract functions with the same arguments
   getNextPageParam appears to increment the value by 1 each time before calling the contract functions again
   The uniqueCachekey is used to cache all the data that it fetches, batch by batch
@@ -37,7 +37,6 @@ export const useBatchRead = (
 
   Slightly more polished and predictable than useBatchRead
   Ideal for calling a single contract function multiple times with a single argument that is incremented by 1 after each call
-
 */
 
 export const usePaginatedRead = (

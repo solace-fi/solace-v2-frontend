@@ -40,6 +40,7 @@ import {
 } from '@/hooks/contract'
 import { erc20ABI } from '@wagmi/core'
 import Test from '@/constants/abi/delete-me-later.json'
+import { useInputAmount } from '@/hooks/internal/useInputAmount'
 
 const testTokens: ReadToken[] = [
   {
@@ -73,10 +74,13 @@ export default function Home(): JSX.Element {
   const [d1, setD1] = useState(false)
   const [selectedD1, setSelectedD1] = useState<ReadToken | undefined>(undefined)
   const [d1Input, setD1Input] = useState<string>('')
-  const [inputValue, setInputValue] = useState('')
+  const { amount, handleInputChange, setMax, isAppropriateAmount } =
+    useInputAmount()
   const [checked, setChecked] = useState(false)
   const [openDates, setOpenDates] = useState<boolean>(false)
   const [date, setDate] = useState<Date>(new Date())
+
+  const exampleMaxAmount = 1000
 
   const selectedProvider = useAppSelector(
     (state) => state.general.selectedProvider
@@ -124,7 +128,7 @@ export default function Home(): JSX.Element {
       chainId: chain?.id ?? defaultLocalChain.chainId,
     },
     'approve',
-    ['0x501acE7a18b0F59E51eb198cD73480F8467DE100', inputValue],
+    ['0x501acE7a18b0F59E51eb198cD73480F8467DE100', amount],
     (data) => {
       console.log('write success', data)
       makeTxToast(
@@ -206,9 +210,9 @@ export default function Home(): JSX.Element {
       5
     )
 
-  console.log('data', data)
+  // console.log('data', data)
 
-  console.log('paginated', paginatedData)
+  // console.log('paginated', paginatedData)
 
   useEffect(() => {
     setLocalAccount(account)
@@ -445,12 +449,16 @@ export default function Home(): JSX.Element {
             </Accordion>
           </Flex>
           <Flex col gap={4}>
+            <Tdiv>
+              IsAppropriateAmount?{' '}
+              {isAppropriateAmount(amount, 18, BigInt(exampleMaxAmount))}
+            </Tdiv>
             <GenericInputSection
               nohover
               isOpen={d1}
               placeholder={'$'}
-              value={inputValue}
-              onChange={(e: any) => setInputValue(e.target.value)}
+              value={amount}
+              onChange={(e: any) => handleInputChange(e.target.value)}
             />
             <GenericInputSection
               nohover
@@ -458,8 +466,8 @@ export default function Home(): JSX.Element {
               placeholder={'$'}
               frontIcon={<>Icon</>}
               frontButtonText={'Fixed'}
-              value={inputValue}
-              onChange={(e: any) => setInputValue(e.target.value)}
+              value={amount}
+              onChange={(e: any) => handleInputChange(e.target.value)}
             />
             <GenericInputSection
               displayIconOnMobile={false}
@@ -468,8 +476,8 @@ export default function Home(): JSX.Element {
               placeholder={'$'}
               frontIcon={<>Icon</>}
               frontButtonText={'Fixed'}
-              value={inputValue}
-              onChange={(e: any) => setInputValue(e.target.value)}
+              value={amount}
+              onChange={(e: any) => handleInputChange(e.target.value)}
             />
             <GenericInputSection
               hasArrow
@@ -477,8 +485,8 @@ export default function Home(): JSX.Element {
               placeholder={'$'}
               frontIcon={<>Icon</>}
               frontButtonText={selectedD1?.symbol ?? 'Test'}
-              value={inputValue}
-              onChange={(e: any) => setInputValue(e.target.value)}
+              value={amount}
+              onChange={(e: any) => handleInputChange(e.target.value)}
               onClickFront={() => setD1(!d1)}
             />
             <GenericInputSection
@@ -488,19 +496,19 @@ export default function Home(): JSX.Element {
               frontIcon={<>Icon</>}
               frontButtonText={selectedD1?.symbol ?? 'Test'}
               backButtonText={'Max Value'}
-              value={inputValue}
-              onChange={(e: any) => setInputValue(e.target.value)}
+              value={amount}
+              onChange={(e: any) => handleInputChange(e.target.value)}
               onClickFront={() => setD1(!d1)}
-              onClickBack={() => setInputValue('max')}
+              onClickBack={() => setMax(BigInt(exampleMaxAmount), 18)}
             />
             <GenericInputSection
               hasArrow
               isOpen={d1}
               placeholder={'$'}
               backButtonText={'Max Value'}
-              value={inputValue}
-              onChange={(e: any) => setInputValue(e.target.value)}
-              onClickBack={() => setInputValue('max')}
+              value={amount}
+              onChange={(e: any) => handleInputChange(e.target.value)}
+              onClickBack={() => setMax(BigInt(exampleMaxAmount), 18)}
             />
             <GenericInputSection
               hasArrow
@@ -509,10 +517,10 @@ export default function Home(): JSX.Element {
               frontIcon={<>Icon</>}
               frontButtonText={selectedD1?.symbol ?? 'Test'}
               backButtonText={'Max Value'}
-              value={inputValue}
-              onChange={(e: any) => setInputValue(e.target.value)}
+              value={amount}
+              onChange={(e: any) => handleInputChange(e.target.value)}
               onClickFront={() => setD1(!d1)}
-              onClickBack={() => setInputValue('max')}
+              onClickBack={() => setMax(BigInt(exampleMaxAmount), 18)}
               backButtonDisabled
             />
             <BalanceDropdownOptions
