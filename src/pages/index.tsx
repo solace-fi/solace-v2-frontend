@@ -32,8 +32,14 @@ import { fixed, formatAmount } from '../utils'
 import { useAppSelector } from '@/store/_hooks'
 import { useAccount, useNetwork } from 'wagmi'
 import { useToast } from '@/hooks/useToast'
-import { useRead, useWrite } from '@/hooks/contract'
+import {
+  useBatchRead,
+  usePaginatedRead,
+  useRead,
+  useWrite,
+} from '@/hooks/contract'
 import { erc20ABI } from '@wagmi/core'
+import Test from '@/constants/abi/delete-me-later.json'
 
 const testTokens: ReadToken[] = [
   {
@@ -131,6 +137,13 @@ export default function Home(): JSX.Element {
     },
     (error) => {
       console.log('write error', error)
+      // makeTxToast(
+      //   't',
+      //   TransactionCondition.CANCELLED,
+      //   appTheme,
+      //   data.hash,
+      //   data.hash
+      // )
     },
     (data) => {
       console.log('tx success', data)
@@ -144,16 +157,58 @@ export default function Home(): JSX.Element {
     },
     (error) => {
       console.log('tx error', error)
-      makeTxToast(
-        't',
-        TransactionCondition.FAILURE,
-        appTheme,
-        error.transactionHash,
-        error.transactionHash,
-        error
-      )
+      // makeTxToast(
+      //   't',
+      //   TransactionCondition.FAILURE,
+      //   appTheme,
+      //   error.transactionHash,
+      //   error.transactionHash,
+      //   error
+      // )
     }
   )
+
+  const { data, fetchNextPage } = useBatchRead(
+    [
+      {
+        address: '0x1dfe7ca09e99d10835bf73044a23b73fc20623df',
+        abi: Test,
+        functionName: 'getChest',
+        chainId: chain?.id ?? defaultLocalChain.chainId,
+      },
+      {
+        address: '0x1dfe7ca09e99d10835bf73044a23b73fc20623df',
+        abi: Test,
+        functionName: 'getHead',
+        chainId: chain?.id ?? defaultLocalChain.chainId,
+      },
+      {
+        address: '0x1dfe7ca09e99d10835bf73044a23b73fc20623df',
+        abi: Test,
+        functionName: 'getFoot',
+        chainId: chain?.id ?? defaultLocalChain.chainId,
+      },
+    ],
+    2,
+    'new 4'
+  )
+
+  const { data: paginatedData, fetchNextPage: fetchNextPaginated } =
+    usePaginatedRead(
+      {
+        address: '0x1dfe7ca09e99d10835bf73044a23b73fc20623df',
+        abi: Test,
+        functionName: 'getChest',
+        chainId: 1,
+      },
+      'new cache',
+      0,
+      5
+    )
+
+  console.log('data', data)
+
+  console.log('paginated', paginatedData)
 
   useEffect(() => {
     setLocalAccount(account)
@@ -267,6 +322,8 @@ export default function Home(): JSX.Element {
             they can interact with me!
           </Tdiv>
         </Card>
+        <Button onClick={fetchNextPage}>fetch next batch</Button>
+        <Button onClick={fetchNextPaginated}>fetch next page</Button>
         <Flex gap={10}>
           <Button big success onClick={successToast}>
             create successful toast
