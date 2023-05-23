@@ -29,22 +29,19 @@ import { getDarkMode } from '../store/darkMode'
 import { toggleDarkTheme } from '../store/general/generalSlice'
 import { useAppDispatch } from '../store/_hooks'
 import { setShowApp } from '@/store/ui/uiSlice'
-
-import '../styles/index.css'
-import 'react-toastify/dist/ReactToastify.css'
-import '../styles/toast.css'
 import { Flex } from '@/components/atoms/Flex'
 
-import '@rainbow-me/rainbowkit/styles.css'
 import {
-  AvatarComponent,
   getDefaultWallets,
   RainbowKitProvider,
   darkTheme as raindowDarkTheme,
 } from '@rainbow-me/rainbowkit'
-import makeBlockie from 'ethereum-blockies-base64'
-import { UserImage } from '@/components/molecules/UserImage'
 import { CustomAvatar } from '@/components/molecules/CustomAvatar'
+
+import '../styles/index.css'
+import 'react-toastify/dist/ReactToastify.css'
+import '../styles/toast.css'
+import '@rainbow-me/rainbowkit/styles.css'
 
 const routeInfoArr: RouteInfo[] = [
   {
@@ -56,7 +53,6 @@ const routeInfoArr: RouteInfo[] = [
     name: 'Risk Market',
     title: 'Risk Market',
     to: '',
-    // children: ['/pool'],
   },
   {
     name: 'Dashboard',
@@ -143,6 +139,10 @@ function DarkModeProvider({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
+/*
+  https://fkhadra.github.io/react-toastify/introduction
+*/
+
 function StyledThemeProvider({ children }: { children: ReactNode }) {
   const appTheme = useAppSelector((state) => state.general.appTheme)
   const theme = appTheme == 'light' ? lightTheme : darkTheme
@@ -172,6 +172,10 @@ function StyledThemeProvider({ children }: { children: ReactNode }) {
     </ThemeProvider>
   )
 }
+
+/*
+  https://www.rainbowkit.com/docs/installation
+*/
 
 function CustomRainbowKitProvider({
   chains,

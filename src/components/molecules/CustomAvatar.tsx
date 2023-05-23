@@ -1,6 +1,10 @@
 import { AvatarComponent } from '@rainbow-me/rainbowkit'
 import makeBlockie from 'ethereum-blockies-base64'
 
+/*
+  https://github.com/MyCryptoHQ/ethereum-blockies-base64
+*/
+
 export const CustomAvatar: AvatarComponent = ({
   address,
 }: {

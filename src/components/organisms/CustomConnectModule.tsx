@@ -4,9 +4,12 @@ import { Tdiv } from '../atoms/Text'
 import { Flex } from '../atoms/Flex'
 import { UserImage } from '../molecules/UserImage'
 import { shortenAddress } from '@/utils'
-import { useEffect, useState } from 'react'
 import { useEnsName } from 'wagmi'
 import { CustomAvatar } from '../molecules/CustomAvatar'
+
+/*
+  https://www.rainbowkit.com/docs/custom-connect-button
+*/
 
 export const CustomConnectModule = ({ mobile }: { mobile?: boolean }) => {
   const { data: ensName } = useEnsName()

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { PropsWithChildren } from 'react'
 import { MobileNavPanelComponent, TopNav, MobileNavMenu } from '../atoms/Navbar'
 import { Button } from '../atoms/Button'
@@ -16,7 +16,6 @@ import { toggleDarkTheme } from '@/store/general/generalSlice'
 import { StyledNavLink } from '../atoms/Link'
 import { useRouter } from 'next/router'
 import { CustomConnectModule } from './CustomConnectModule'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 export function MobileNavPanel(
   props: PropsWithChildren & {
@@ -46,19 +45,9 @@ export function MobileNavPanel(
               key={page.to}
               onClick={() => {
                 props.setShow(false)
-                // navigate(page.to)
               }}
             >
-              <Tdiv
-                info={
-                  router.pathname == page.to ||
-                  page.children?.some((child) =>
-                    router.pathname.includes(child)
-                  )
-                }
-              >
-                {page.name}
-              </Tdiv>
+              <Tdiv info={router.pathname == page.to}>{page.name}</Tdiv>
             </Card>
           ))}
         </Flex>
@@ -134,15 +123,7 @@ export function FullNavbar(
           <Flex gap={20}>
             {props.routeInfoArr.map((page) => (
               <Fragment key={page.to}>
-                <TabLabelLink
-                  t4
-                  selected={
-                    router.pathname == page.to ||
-                    page.children?.some((child) =>
-                      router.pathname.includes(child)
-                    )
-                  }
-                >
+                <TabLabelLink t4 selected={router.pathname == page.to}>
                   <StyledNavLink href={`/${page.to}`}>
                     {page.name}
                   </StyledNavLink>

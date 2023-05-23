@@ -28,7 +28,7 @@ import { Z_TABLE } from '../constants'
 import { TransactionCondition } from '../constants/enums'
 import { ReadToken } from '../constants/types'
 import { variants } from '../styles/animation-styles'
-import { fixed, formatAmount } from '../utils'
+import { fixed, formatAmount, truncateValue } from '../utils'
 import { useAppSelector } from '@/store/_hooks'
 import { useAccount, useNetwork } from 'wagmi'
 import { useToast } from '@/hooks/useToast'
@@ -42,6 +42,7 @@ import { erc20ABI } from '@wagmi/core'
 import Test from '@/constants/abi/delete-me-later.json'
 import { useInputAmount } from '@/hooks/internal/useInputAmount'
 import { parseUnits } from 'viem'
+import useDebounce from '@/hooks/useDebounce'
 
 const testTokens: ReadToken[] = [
   {
@@ -94,6 +95,8 @@ export default function Home(): JSX.Element {
 
   const { makeTxToast } = useToast()
 
+  const debouncedAmount = useDebounce(amount, 500)
+
   const {
     data: readData,
     isLoading: isReadLoading,
@@ -135,20 +138,13 @@ export default function Home(): JSX.Element {
     ],
     (data) => {
       console.log('write success', data)
-      makeTxToast(
-        't',
-        TransactionCondition.PENDING,
-        appTheme,
-        data.hash,
-        data.hash
-      )
+      makeTxToast('t', TransactionCondition.PENDING, data.hash, data.hash)
     },
     (error) => {
       console.log('write error', error)
       // makeTxToast(
       //   't',
       //   TransactionCondition.CANCELLED,
-      //   appTheme,
       //   data.hash,
       //   data.hash
       // )
@@ -158,7 +154,6 @@ export default function Home(): JSX.Element {
       makeTxToast(
         't',
         TransactionCondition.SUCCESS,
-        appTheme,
         data.transactionHash,
         data.transactionHash
       )
@@ -168,7 +163,6 @@ export default function Home(): JSX.Element {
       // makeTxToast(
       //   't',
       //   TransactionCondition.FAILURE,
-      //   appTheme,
       //   error.transactionHash,
       //   error.transactionHash,
       //   error
@@ -227,7 +221,6 @@ export default function Home(): JSX.Element {
     makeTxToast(
       't',
       TransactionCondition.PENDING,
-      appTheme,
       `${now}`,
       '0x0000000000000000000000000000000000000000',
       undefined
@@ -236,7 +229,6 @@ export default function Home(): JSX.Element {
     makeTxToast(
       't',
       TransactionCondition.SUCCESS,
-      appTheme,
       `${now}`,
       '0x0000000000000000000000000000000000000000',
       undefined
@@ -255,7 +247,6 @@ export default function Home(): JSX.Element {
     makeTxToast(
       't',
       TransactionCondition.PENDING,
-      appTheme,
       `${now}`,
       '0x0000000000000000000000000000000000000000'
     )
@@ -263,7 +254,6 @@ export default function Home(): JSX.Element {
     makeTxToast(
       't',
       TransactionCondition.FAILURE,
-      appTheme,
       `${now}`,
       '0x0000000000000000000000000000000000000000',
       'failed'
@@ -332,8 +322,8 @@ export default function Home(): JSX.Element {
             they can interact with me!
           </Tdiv>
         </Card>
-        <Button onClick={fetchNextPage}>fetch next batch</Button>
-        <Button onClick={fetchNextPaginated}>fetch next page</Button>
+        {/* <Button onClick={fetchNextPage}>fetch next batch</Button>
+        <Button onClick={fetchNextPaginated}>fetch next page</Button> */}
         <Flex gap={10}>
           <Button big success onClick={successToast}>
             create successful toast
@@ -457,8 +447,13 @@ export default function Home(): JSX.Element {
           <Flex col gap={4}>
             <Tdiv>
               IsAppropriateAmount?{' '}
-              {isAppropriateAmount(amount, 18, BigInt(exampleMaxAmount))}
+              {isAppropriateAmount(amount, 18, BigInt(exampleMaxAmount))
+                ? 'true'
+                : 'false'}
             </Tdiv>
+            <Tdiv>Debounced input value: {debouncedAmount}</Tdiv>
+            <Tdiv>Fixed input value: {fixed(amount)}</Tdiv>
+            <Tdiv>Truncated input value: {truncateValue(amount)}</Tdiv>
             <GenericInputSection
               nohover
               isOpen={d1}

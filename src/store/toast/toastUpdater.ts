@@ -1,20 +1,10 @@
-import { useCallback, useEffect, useRef } from 'react'
-import { useAppDispatch } from '../_hooks'
+import { useEffect, useRef } from 'react'
 import { useAccount } from 'wagmi'
 import { toast } from 'react-toastify'
-import { TransactionCondition, Error } from '../../constants/enums'
-import { ErrorData } from '../../constants/types'
-import { setErrors } from './toastSlice'
-import { useAppSelector } from '@/store/_hooks'
-import { useToast } from '@/hooks/useToast'
-import { appError } from '@/constants'
 
 export default function Updater() {
-  const dispatch = useAppDispatch()
   const lastAccount = useRef<string>('')
   const { address: account } = useAccount()
-
-  const { makeAppToast } = useToast()
 
   // Removes toasts from display on chainId or account change
   useEffect(() => {
