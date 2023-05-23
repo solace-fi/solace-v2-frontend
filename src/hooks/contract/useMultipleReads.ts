@@ -1,12 +1,17 @@
 // export {}
 
-import { paginatedIndexesConfig, useContractInfiniteReads } from 'wagmi'
+import {
+  paginatedIndexesConfig,
+  useContractInfiniteReads,
+  useContractReads,
+} from 'wagmi'
 
 // https://wagmi.sh/react/hooks/useContractInfiniteReads
 
 /*
   TODO Polish and research more, I'm honestly not that confident in this hook so maybe not use it so much for now
-  Ideal for calling multiple different contract functions with the same arguments
+
+  Ideal for calling MULTIPLE DIFFERENT contract functions with the SAME arguments
   getNextPageParam appears to increment the value by 1 each time before calling the contract functions again
   The uniqueCachekey is used to cache all the data that it fetches, batch by batch
 */
@@ -36,9 +41,8 @@ export const useBatchRead = (
 }
 
 /*
-
   Slightly more polished and predictable than useBatchRead
-  Ideal for calling a single contract function multiple times with a single argument that is incremented by 1 after each call
+  Ideal for calling a SINGLE contract function multiple times with a SINGLE argument that is incremented by 1 after each call
 */
 
 export const usePaginatedRead = (
@@ -48,9 +52,9 @@ export const usePaginatedRead = (
     functionName: string
     chainId: number
   },
-  uniqueCacheKey: string,
   startIndex: number,
-  itemsPerPage: number
+  itemsPerPage: number,
+  uniqueCacheKey: string
 ) => {
   const { data, fetchNextPage } = useContractInfiniteReads({
     cacheKey: uniqueCacheKey,
@@ -68,4 +72,24 @@ export const usePaginatedRead = (
   })
 
   return { data, fetchNextPage }
+}
+
+/*
+  Ideal for calling MULTIPLE DIFFERENT contract functions with DIFFERENT arguments
+
+  https://wagmi.sh/react/hooks/useContractReads
+*/
+
+export const useMulticallRead = (
+  contracts: {
+    address: `0x${string}`
+    abi: any[]
+    functionName: string
+    chainId: number
+    args: any[]
+  }[]
+) => {
+  const { data, isError, isLoading } = useContractReads({ contracts })
+
+  return { data, isError, isLoading }
 }

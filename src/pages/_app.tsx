@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/store/_hooks'
 import type { AppProps } from 'next/app'
-import { ReactNode, useEffect, useMemo } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { Provider } from 'react-redux'
 import store from '../store/_store'
 import GeneralUpdater from '../store/general/generalUpdater'
@@ -21,14 +21,19 @@ import { ThemeProvider } from 'styled-components'
 import { GlobalStyle, Layout } from '@/components/atoms/Layout'
 import { ToastContainer } from 'react-toastify'
 import { lightTheme, darkTheme } from '../styles/themes'
-import { Network, RouteInfo } from '@/constants/types'
+import { RouteInfo } from '@/constants/types'
 import { Navbar } from '@/components/organisms/Navbar'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 
 import { getDarkMode } from '../store/darkMode'
 import { toggleDarkTheme } from '../store/general/generalSlice'
 import { useAppDispatch } from '../store/_hooks'
 import { setShowApp } from '@/store/ui/uiSlice'
+
+import '../styles/index.css'
+import 'react-toastify/dist/ReactToastify.css'
+import '../styles/toast.css'
+import '@rainbow-me/rainbowkit/styles.css'
 import { Flex } from '@/components/atoms/Flex'
 
 import {
@@ -37,11 +42,6 @@ import {
   darkTheme as raindowDarkTheme,
 } from '@rainbow-me/rainbowkit'
 import { CustomAvatar } from '@/components/molecules/CustomAvatar'
-
-import '../styles/index.css'
-import 'react-toastify/dist/ReactToastify.css'
-import '../styles/toast.css'
-import '@rainbow-me/rainbowkit/styles.css'
 
 const routeInfoArr: RouteInfo[] = [
   {

@@ -4,16 +4,20 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi'
+import { useGas } from '../provider/useGas'
 
 export const useWrite = (
   contract: { address: `0x${string}`; abi: any; chainId: number },
   functionName: string,
   args: any[],
+  overrides?: { value?: bigint; txType?: 0 | 2; gasLimit?: bigint },
   onWriteSuccess?: (data: any) => any,
   onWriteError?: (error: any) => any,
   onTxSuccess?: (data: any) => any,
   onTxError?: (error: any) => any
 ) => {
+  const { gasConfig } = useGas(overrides?.txType ?? 2)
+
   /*
   https://wagmi.sh/react/prepare-hooks/usePrepareContractWrite
   */
@@ -23,6 +27,9 @@ export const useWrite = (
     functionName,
     args,
     chainId: contract.chainId,
+    value: overrides?.value,
+    gas: overrides?.gasLimit,
+    ...gasConfig,
   })
 
   /*

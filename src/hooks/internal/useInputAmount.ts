@@ -15,7 +15,6 @@ export const useInputAmount = () => {
     (amount: string, amountDecimals: number, assetBalance: bigint): boolean => {
       const bigIntAmount = parseUnits(amount as `${number}`, amountDecimals)
       if (!amount || amount == '.' || bigIntAmount <= BigInt(0)) return false
-      console.log(assetBalance, bigIntAmount)
       return assetBalance >= bigIntAmount
     },
     []

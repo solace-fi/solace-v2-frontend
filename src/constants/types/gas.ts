@@ -1,10 +1,3 @@
-export type GasPriceResult = {
-  fast: number
-  proposed: number
-  safe: number
-  suggestBaseFee?: number
-}
-
 export type GasData = {
   lastBaseFeePerGas: bigint | null
   gasPrice: bigint | null
@@ -18,9 +11,7 @@ export type GasData = {
 }
 
 export type GasConfiguration = {
-  gasPrice?: number
-  maxFeePerGas?: number
-  maxPriorityFeePerGas?: number
-  type?: number
-  gasLimit?: number
+  gasPrice?: bigint
+  maxFeePerGas?: bigint
+  maxPriorityFeePerGas?: bigint
 }

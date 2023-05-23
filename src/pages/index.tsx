@@ -136,6 +136,7 @@ export default function Home(): JSX.Element {
       '0x501acE7a18b0F59E51eb198cD73480F8467DE100',
       parseUnits(amount as `${number}`, 18),
     ],
+    undefined,
     (data) => {
       console.log('write success', data)
       makeTxToast('t', TransactionCondition.PENDING, data.hash, data.hash)
@@ -203,9 +204,9 @@ export default function Home(): JSX.Element {
         functionName: 'getChest',
         chainId: 1,
       },
-      'new cache',
       0,
-      5
+      5,
+      'new cache'
     )
 
   // console.log('data', data)
@@ -301,7 +302,7 @@ export default function Home(): JSX.Element {
       <Button inquiry onClick={refetchRead}>
         click me to call useRead function again
       </Button>
-      <Button onClick={writeAsync ? writeAsync() : undefined}>
+      <Button onClick={writeAsync ? () => writeAsync() : undefined}>
         click me to call contract function
       </Button>
       <Flex col itemsCenter gap={10}>

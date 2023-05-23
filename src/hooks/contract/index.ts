@@ -1,3 +1,3 @@
-export * from './useInfiniteReads'
+export * from './useMultipleReads'
 export * from './useRead'
 export * from './useWrite'
