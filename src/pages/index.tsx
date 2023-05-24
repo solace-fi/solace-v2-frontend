@@ -138,6 +138,12 @@ export default function Home(): JSX.Element {
     ],
     undefined,
     (data) => {
+      console.log('prepare success', data)
+    },
+    (error) => {
+      console.log('prepare error', error)
+    },
+    (data) => {
       console.log('write success', data)
       makeTxToast('t', TransactionCondition.PENDING, data.hash, data.hash)
     },

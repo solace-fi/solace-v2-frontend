@@ -1,5 +1,3 @@
-// export {}
-
 import {
   paginatedIndexesConfig,
   useContractInfiniteReads,
@@ -10,11 +8,16 @@ import {
 
 /*
   TODO Polish and research more, I'm honestly not that confident in this hook so maybe not use it so much for now
-
-  Ideal for calling MULTIPLE DIFFERENT contract functions with the SAME arguments
   getNextPageParam appears to increment the value by 1 each time before calling the contract functions again
-  The uniqueCachekey is used to cache all the data that it fetches, batch by batch
 */
+
+/**
+ * EXPERIMENTAL - Ideal for calling multiple different contract functions with the same argument
+ * @param contracts - An array of contract objects that contain the address, abi, functionName, and chainId of the contract you want to call
+ * @param value - The value that is passed as the argument to the contract functions, typed as a number for now since number types are iterable objects
+ * @param uniqueCacheKey - A unique string that is used to cache the data that is fetched, batch by batch
+ * @returns
+ */
 export const useBatchRead = (
   contracts: {
     address: `0x${string}`
@@ -45,6 +48,14 @@ export const useBatchRead = (
   Ideal for calling a SINGLE contract function multiple times with a SINGLE argument that is incremented by 1 after each call
 */
 
+/**
+ *
+ * @param contract - The contract object that contains the address, abi, functionName, and chainId of the contract you want to call
+ * @param startIndex - The initial value that is passed as the argument to the contract function on first iteration
+ * @param itemsPerPage - How many items are fetched per call
+ * @param uniqueCacheKey - A unique string that is used to cache the data that is fetched
+ * @returns
+ */
 export const usePaginatedRead = (
   contract: {
     address: `0x${string}`
@@ -75,11 +86,16 @@ export const usePaginatedRead = (
 }
 
 /*
-  Ideal for calling MULTIPLE DIFFERENT contract functions with DIFFERENT arguments
+  Ideal for calling MULTIPLE POTENTIALLY DIFFERENT contract functions with DIFFERENT arguments
 
   https://wagmi.sh/react/hooks/useContractReads
 */
 
+/**
+ *
+ * @param contracts - An array of contract objects that contain the address, abi, functionName, chainId, and args of the contract you want to call
+ * @returns
+ */
 export const useMulticallRead = (
   contracts: {
     address: `0x${string}`

@@ -33,7 +33,7 @@ export const useInputAmount = () => {
 
   const handleInputChange = useCallback(
     (input: string, maxDecimals?: number, maxBalance?: string) => {
-      const filtered = filterAmount(input, amount)
+      const filtered = filterAmount(input)
       const formatted = formatAmount(filtered)
       if (
         filtered.includes('.') &&

@@ -9,7 +9,13 @@ import { useAppSelector } from '@/store/_hooks'
 import { useEffect, useState } from 'react'
 import { useFeeData, useNetwork } from 'wagmi'
 
-export const useGas = (txType: 0 | 2) => {
+/**
+ *
+ * @param use Return the gas configuration if true, and empty configuration if false.
+ * @param txType 0 for legacy transactions, 2 for EIP-1559 transactions.
+ * @returns
+ */
+export const useGas = (use?: boolean, txType?: 0 | 2) => {
   const defaultLocalChain = useAppSelector(
     (state) => state.general.defaultLocalChain
   )
@@ -22,17 +28,21 @@ export const useGas = (txType: 0 | 2) => {
 
   useEffect(() => {
     if (!data) return
+    if (!use) {
+      setGasConfig({})
+      return
+    }
     if (txType === 0 && data.gasPrice) {
       setGasConfig({
         gasPrice: data.gasPrice,
       })
-    } else if (txType === 2 && data.maxFeePerGas && data.maxPriorityFeePerGas) {
+    } else if (data.maxFeePerGas && data.maxPriorityFeePerGas) {
       setGasConfig({
         maxFeePerGas: data.maxFeePerGas,
         maxPriorityFeePerGas: data.maxPriorityFeePerGas,
       })
     }
-  }, [data])
+  }, [data, use, txType])
 
   return { gasConfig, isError, isLoading }
 }

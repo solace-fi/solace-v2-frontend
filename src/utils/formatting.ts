@@ -201,7 +201,7 @@ export const floatUnits = (value: bigint, decimals: number): number =>
   parseFloat(formatUnits(value, decimals))
 
 // used for correctly user amount input before processing
-export const filterAmount = (input: string, amount: string): string => {
+export const filterAmount = (input: string): string => {
   const filtered = input.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
   return filtered
 }
