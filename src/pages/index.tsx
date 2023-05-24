@@ -28,10 +28,21 @@ import { Z_TABLE } from '../constants'
 import { TransactionCondition } from '../constants/enums'
 import { ReadToken } from '../constants/types'
 import { variants } from '../styles/animation-styles'
-import { fixed, formatAmount } from '../utils'
+import { fixed, formatAmount, truncateValue } from '../utils'
 import { useAppSelector } from '@/store/_hooks'
 import { useAccount, useNetwork } from 'wagmi'
 import { useToast } from '@/hooks/useToast'
+import {
+  useBatchRead,
+  usePaginatedRead,
+  useRead,
+  useWrite,
+} from '@/hooks/contract'
+import { erc20ABI } from '@wagmi/core'
+import Test from '@/constants/abi/delete-me-later.json'
+import { useInputAmount } from '@/hooks/internal/useInputAmount'
+import { parseUnits } from 'viem'
+import useDebounce from '@/hooks/useDebounce'
 
 const testTokens: ReadToken[] = [
   {
@@ -65,21 +76,148 @@ export default function Home(): JSX.Element {
   const [d1, setD1] = useState(false)
   const [selectedD1, setSelectedD1] = useState<ReadToken | undefined>(undefined)
   const [d1Input, setD1Input] = useState<string>('')
-  const [inputValue, setInputValue] = useState('')
+  const { amount, handleInputChange, setMax, isAppropriateAmount } =
+    useInputAmount()
   const [checked, setChecked] = useState(false)
   const [openDates, setOpenDates] = useState<boolean>(false)
   const [date, setDate] = useState<Date>(new Date())
+
+  const exampleMaxAmount = 1000
 
   const selectedProvider = useAppSelector(
     (state) => state.general.selectedProvider
   )
   const minute = useAppSelector((state) => state.general.minute)
-  const block = useAppSelector((state) => state.provider.latestBlock)
+  // const block = useAppSelector((state) => state.provider.latestBlock) // INFO - get latest block number in real time, but disabled atm because it causes unnecessary rerenders by constantly refreshing data
   const { chain } = useNetwork()
   const { address: account } = useAccount()
   const [localAccount, setLocalAccount] = useState<string | undefined>()
 
   const { makeTxToast } = useToast()
+
+  const debouncedAmount = useDebounce(amount, 500)
+
+  const {
+    data: readData,
+    isLoading: isReadLoading,
+    refetch: refetchRead,
+  } = useRead<bigint>(
+    {
+      address: '0x6a49238e4d0fA003BA07fbd5ec8B6b045f980574',
+      abi: erc20ABI,
+      chainId: chain?.id ?? defaultLocalChain.chainId,
+    },
+    'name',
+    [],
+    (data) => {
+      console.log('read data', data)
+    },
+    (data) => {
+      console.log('read error', data)
+    }
+  )
+
+  const {
+    writeAsync,
+    writeData,
+    writeError,
+    txData,
+    txError,
+    isTxLoading,
+    isTxSuccess,
+  } = useWrite(
+    {
+      address: '0x6a49238e4d0fA003BA07fbd5ec8B6b045f980574',
+      abi: erc20ABI,
+      chainId: chain?.id ?? defaultLocalChain.chainId,
+    },
+    'approve',
+    [
+      '0x501acE7a18b0F59E51eb198cD73480F8467DE100',
+      parseUnits(amount as `${number}`, 18),
+    ],
+    undefined,
+    (data) => {
+      console.log('prepare success', data)
+    },
+    (error) => {
+      console.log('prepare error', error)
+    },
+    (data) => {
+      console.log('write success', data)
+      makeTxToast('t', TransactionCondition.PENDING, data.hash, data.hash)
+    },
+    (error) => {
+      console.log('write error', error)
+      // makeTxToast(
+      //   't',
+      //   TransactionCondition.CANCELLED,
+      //   data.hash,
+      //   data.hash
+      // )
+    },
+    (data) => {
+      console.log('tx success', data)
+      makeTxToast(
+        't',
+        TransactionCondition.SUCCESS,
+        data.transactionHash,
+        data.transactionHash
+      )
+    },
+    (error) => {
+      console.log('tx error', error)
+      // makeTxToast(
+      //   't',
+      //   TransactionCondition.FAILURE,
+      //   error.transactionHash,
+      //   error.transactionHash,
+      //   error
+      // )
+    }
+  )
+
+  const { data, fetchNextPage } = useBatchRead(
+    [
+      {
+        address: '0x1dfe7ca09e99d10835bf73044a23b73fc20623df',
+        abi: Test,
+        functionName: 'getChest',
+        chainId: chain?.id ?? defaultLocalChain.chainId,
+      },
+      {
+        address: '0x1dfe7ca09e99d10835bf73044a23b73fc20623df',
+        abi: Test,
+        functionName: 'getHead',
+        chainId: chain?.id ?? defaultLocalChain.chainId,
+      },
+      {
+        address: '0x1dfe7ca09e99d10835bf73044a23b73fc20623df',
+        abi: Test,
+        functionName: 'getFoot',
+        chainId: chain?.id ?? defaultLocalChain.chainId,
+      },
+    ],
+    1,
+    'randomkey'
+  )
+
+  const { data: paginatedData, fetchNextPage: fetchNextPaginated } =
+    usePaginatedRead(
+      {
+        address: '0x1dfe7ca09e99d10835bf73044a23b73fc20623df',
+        abi: Test,
+        functionName: 'getChest',
+        chainId: 1,
+      },
+      0,
+      5,
+      'new cache'
+    )
+
+  // console.log('data', data)
+
+  // console.log('paginated', paginatedData)
 
   useEffect(() => {
     setLocalAccount(account)
@@ -90,7 +228,6 @@ export default function Home(): JSX.Element {
     makeTxToast(
       't',
       TransactionCondition.PENDING,
-      appTheme,
       `${now}`,
       '0x0000000000000000000000000000000000000000',
       undefined
@@ -99,7 +236,6 @@ export default function Home(): JSX.Element {
     makeTxToast(
       't',
       TransactionCondition.SUCCESS,
-      appTheme,
       `${now}`,
       '0x0000000000000000000000000000000000000000',
       undefined
@@ -118,7 +254,6 @@ export default function Home(): JSX.Element {
     makeTxToast(
       't',
       TransactionCondition.PENDING,
-      appTheme,
       `${now}`,
       '0x0000000000000000000000000000000000000000'
     )
@@ -126,7 +261,6 @@ export default function Home(): JSX.Element {
     makeTxToast(
       't',
       TransactionCondition.FAILURE,
-      appTheme,
       `${now}`,
       '0x0000000000000000000000000000000000000000',
       'failed'
@@ -161,12 +295,22 @@ export default function Home(): JSX.Element {
       </Card>
       <Tdiv primary>{selectedProvider?.toString()}</Tdiv>
       <Tdiv primary>minutes passed: {minute}</Tdiv>
-      <Tdiv primary>blocknumber: {block.number.toString()}</Tdiv>
+      {/* <Tdiv primary>blocknumber: {block.number.toString()}</Tdiv> */}
       <Tdiv primary>local chainId: {defaultLocalChain.chainId}</Tdiv>
       <Tdiv primary>local explorer: {defaultLocalChain.explorer.url}</Tdiv>
       <Tdiv primary>web3 chainId: {chain?.id}</Tdiv>
       <Tdiv primary>web3 explorer: {chain?.blockExplorers?.default.url}</Tdiv>
       <Tdiv primary>web3 account: {localAccount}</Tdiv>
+      <Tdiv primary>
+        example useRead value:{' '}
+        {isReadLoading ? 'loading' : readData?.toString() ?? 'none'}
+      </Tdiv>
+      <Button inquiry onClick={refetchRead}>
+        click me to call useRead function again
+      </Button>
+      <Button onClick={writeAsync ? () => writeAsync() : undefined}>
+        click me to call contract function
+      </Button>
       <Flex col itemsCenter gap={10}>
         <CardContainer>
           <Card>
@@ -185,6 +329,8 @@ export default function Home(): JSX.Element {
             they can interact with me!
           </Tdiv>
         </Card>
+        {/* <Button onClick={fetchNextPage}>fetch next batch</Button>
+        <Button onClick={fetchNextPaginated}>fetch next page</Button> */}
         <Flex gap={10}>
           <Button big success onClick={successToast}>
             create successful toast
@@ -306,12 +452,21 @@ export default function Home(): JSX.Element {
             </Accordion>
           </Flex>
           <Flex col gap={4}>
+            <Tdiv>
+              IsAppropriateAmount?{' '}
+              {isAppropriateAmount(amount, 18, BigInt(exampleMaxAmount))
+                ? 'true'
+                : 'false'}
+            </Tdiv>
+            <Tdiv>Debounced input value: {debouncedAmount}</Tdiv>
+            <Tdiv>Fixed input value: {fixed(amount)}</Tdiv>
+            <Tdiv>Truncated input value: {truncateValue(amount)}</Tdiv>
             <GenericInputSection
               nohover
               isOpen={d1}
               placeholder={'$'}
-              value={inputValue}
-              onChange={(e: any) => setInputValue(e.target.value)}
+              value={amount}
+              onChange={(e: any) => handleInputChange(e.target.value)}
             />
             <GenericInputSection
               nohover
@@ -319,8 +474,8 @@ export default function Home(): JSX.Element {
               placeholder={'$'}
               frontIcon={<>Icon</>}
               frontButtonText={'Fixed'}
-              value={inputValue}
-              onChange={(e: any) => setInputValue(e.target.value)}
+              value={amount}
+              onChange={(e: any) => handleInputChange(e.target.value)}
             />
             <GenericInputSection
               displayIconOnMobile={false}
@@ -329,8 +484,8 @@ export default function Home(): JSX.Element {
               placeholder={'$'}
               frontIcon={<>Icon</>}
               frontButtonText={'Fixed'}
-              value={inputValue}
-              onChange={(e: any) => setInputValue(e.target.value)}
+              value={amount}
+              onChange={(e: any) => handleInputChange(e.target.value)}
             />
             <GenericInputSection
               hasArrow
@@ -338,8 +493,8 @@ export default function Home(): JSX.Element {
               placeholder={'$'}
               frontIcon={<>Icon</>}
               frontButtonText={selectedD1?.symbol ?? 'Test'}
-              value={inputValue}
-              onChange={(e: any) => setInputValue(e.target.value)}
+              value={amount}
+              onChange={(e: any) => handleInputChange(e.target.value)}
               onClickFront={() => setD1(!d1)}
             />
             <GenericInputSection
@@ -349,19 +504,19 @@ export default function Home(): JSX.Element {
               frontIcon={<>Icon</>}
               frontButtonText={selectedD1?.symbol ?? 'Test'}
               backButtonText={'Max Value'}
-              value={inputValue}
-              onChange={(e: any) => setInputValue(e.target.value)}
+              value={amount}
+              onChange={(e: any) => handleInputChange(e.target.value)}
               onClickFront={() => setD1(!d1)}
-              onClickBack={() => setInputValue('max')}
+              onClickBack={() => setMax(BigInt(exampleMaxAmount), 18)}
             />
             <GenericInputSection
               hasArrow
               isOpen={d1}
               placeholder={'$'}
               backButtonText={'Max Value'}
-              value={inputValue}
-              onChange={(e: any) => setInputValue(e.target.value)}
-              onClickBack={() => setInputValue('max')}
+              value={amount}
+              onChange={(e: any) => handleInputChange(e.target.value)}
+              onClickBack={() => setMax(BigInt(exampleMaxAmount), 18)}
             />
             <GenericInputSection
               hasArrow
@@ -370,10 +525,10 @@ export default function Home(): JSX.Element {
               frontIcon={<>Icon</>}
               frontButtonText={selectedD1?.symbol ?? 'Test'}
               backButtonText={'Max Value'}
-              value={inputValue}
-              onChange={(e: any) => setInputValue(e.target.value)}
+              value={amount}
+              onChange={(e: any) => handleInputChange(e.target.value)}
               onClickFront={() => setD1(!d1)}
-              onClickBack={() => setInputValue('max')}
+              onClickBack={() => setMax(BigInt(exampleMaxAmount), 18)}
               backButtonDisabled
             />
             <BalanceDropdownOptions

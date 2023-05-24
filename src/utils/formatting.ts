@@ -5,11 +5,12 @@ import { formatUnits } from 'viem'
 // truncate numbers without rounding
 export const fixed = (n: number | string, decimals = 1): number => {
   if (typeof n == 'string') {
-    n = parseFloat(n)
+    n = parseFloat(formatAmount(n))
   }
   return Math.floor(n * Math.pow(10, decimals)) / Math.pow(10, decimals)
 }
 
+// large function that uses other functions together to truncate a number to a certain number of decimals
 export const truncateValue = (
   value: number | string,
   decimals = 6,
@@ -41,6 +42,7 @@ export const truncateValue = (
   return truncatedStr
 }
 
+// converts scientific notation like 1.2345e3 or 1.2345e-5 to precise number like 1234.5 or 0.000012345
 export const convertSciNotaToPrecise = (str: string): string => {
   // if string is in scientific notation, for example (1.2345e3, or 1.2345e-5), (2)
   if (str.includes('e')) {
@@ -118,6 +120,7 @@ export const numberAbbreviate = (
   return `${a}.${b}${abbrev}`
 }
 
+// shifts decimals of a value to the right by a certain amount
 export const accurateMultiply = (
   value: number | string,
   decimals: number
@@ -198,13 +201,13 @@ export const floatUnits = (value: bigint, decimals: number): number =>
   parseFloat(formatUnits(value, decimals))
 
 // used for correctly user amount input before processing
-export const filterAmount = (input: string, amount: string): string => {
-  if (!amount && input == '.') input = '.'
+export const filterAmount = (input: string): string => {
   const filtered = input.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
   return filtered
 }
 
 export const formatAmount = (amount: string): string =>
+  // format to 0.0 by default if amount is incomplete
   amount == '0.' || amount == '.' || amount == '' ? '0.0' : amount
 
 export const capitalizeFirstLetter = (str: string): string => {
@@ -216,72 +219,6 @@ export const trim0x = (address: string): string =>
   address.startsWith('0x')
     ? address.slice(2).toLowerCase()
     : address.toLowerCase()
-
-export function leftPad(s: any, l: number, f = ' ') {
-  let s2 = `${s}`
-  while (s2.length < l) s2 = `${f}${s2}`
-  return s2
-}
-
-export function rightPad(s: any, l: number, f = ' ') {
-  let s2 = `${s}`
-  while (s2.length < l) s2 = `${s2}${f}`
-  return s2
-}
-
-export function formatTimestamp(timestamp: number) {
-  const d = new Date(timestamp * 1000)
-  return `${
-    d.getUTCMonth() + 1
-  }/${d.getUTCDate()}/${d.getUTCFullYear()} ${leftPad(
-    d.getUTCHours(),
-    2,
-    '0'
-  )}:${leftPad(d.getUTCMinutes(), 2, '0')}:${leftPad(
-    d.getUTCSeconds(),
-    2,
-    '0'
-  )}`
-}
-
-export function formatNumber(params: any) {
-  function f(n: string) {
-    if (typeof n == 'number') n = `${n}`
-    let str = `${parseInt(n).toLocaleString()}`
-    if (!params || !params.decimals || params.decimals <= 0) return str
-    const i = n.indexOf('.')
-    let str2 = i == -1 ? '' : n.substring(i + 1)
-    str2 = rightPad(str2.substring(0, params.decimals), params.decimals, '0')
-    str = `${str}.${str2}`
-    return str
-  }
-  return f
-}
-
-export function tooltipFormatterNumber(params: any) {
-  const f2 = formatNumber(params)
-  function f(props: any) {
-    let num = f2(props)
-    if (params.prefix) num = `${params.prefix}${num}`
-    return num
-  }
-  return f
-}
-
-export function formatCurrency(params: any) {
-  function f(n: any) {
-    if (typeof n == 'number') n = `${n}`
-    let str = `\$${parseInt(n).toLocaleString()}`
-    if (!params || !params.decimals || params.decimals <= 0) return str
-    const i = n.indexOf('.')
-    if (i == -1) return str
-    let str2 = n.substring(i + 1)
-    str2 = rightPad(str2.substring(0, params.decimals), params.decimals, '0')
-    str = `${str}.${str2}`
-    return str
-  }
-  return f
-}
 
 export const equalsIgnoreCase = (
   baseString: string,

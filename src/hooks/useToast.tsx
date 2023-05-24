@@ -7,7 +7,6 @@ export const useToast = () => {
   const makeTxToast = (
     txType: string,
     condition: TransactionCondition,
-    theme: 'light' | 'dark',
     toastId?: string,
     txHash?: string,
     errObj?: any

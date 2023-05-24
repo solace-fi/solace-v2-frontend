@@ -1,59 +1,48 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
-import { GasData } from '../../constants/types'
-import axios from 'axios'
-import { GasConfiguration } from '../../constants/types/gas'
+/*
+    https://www.educative.io/answers/type-0-vs-type-2-ethereum-transactions
+    https://wagmi.sh/react/hooks/useFeeData
+
+*/
+
+import { GasConfiguration } from '@/constants/types'
 import { useAppSelector } from '@/store/_hooks'
-import { useFeeData, usePublicClient } from 'wagmi'
+import { useEffect, useState } from 'react'
+import { useFeeData, useNetwork } from 'wagmi'
 
-// export const useGetFunctionGas = () => {
-//   const activeNetwork = useAppSelector((state) => state.network.activeNetwork)
-//   const gasData = useAppSelector((state) => state.provider.gasData)
+/**
+ *
+ * @param use Return the gas configuration if true, and empty configuration if false.
+ * @param txType 0 for legacy transactions, 2 for EIP-1559 transactions.
+ * @returns
+ */
+export const useGas = (use?: boolean, txType?: 0 | 2) => {
+  const defaultLocalChain = useAppSelector(
+    (state) => state.general.defaultLocalChain
+  )
+  const { chain } = useNetwork()
 
-//   const { connector } = useWeb3React()
+  const { data, isError, isLoading } = useFeeData({
+    chainId: chain?.id ?? defaultLocalChain.chainId,
+  })
+  const [gasConfig, setGasConfig] = useState<GasConfiguration>({})
 
-//   const getGasConfig = useCallback(
-//     (_gasValue: number | undefined): GasConfiguration => {
-//       // null check and testnet check
-//       const gasValue = _gasValue ?? gasData?.gasPrice
+  useEffect(() => {
+    if (!data) return
+    if (!use) {
+      setGasConfig({})
+      return
+    }
+    if (txType === 0 && data.gasPrice) {
+      setGasConfig({
+        gasPrice: data.gasPrice,
+      })
+    } else if (data.maxFeePerGas && data.maxPriorityFeePerGas) {
+      setGasConfig({
+        maxFeePerGas: data.maxFeePerGas,
+        maxPriorityFeePerGas: data.maxPriorityFeePerGas,
+      })
+    }
+  }, [data, use, txType])
 
-//       const activeWalletConnector = SUPPORTED_WALLETS.find(
-//         (w) => w.connector === connector
-//       )
-
-//       if (
-//         !activeWalletConnector ||
-//         activeNetwork.isTestnet ||
-//         !gasValue ||
-//         !gasData
-//       ) {
-//         return {}
-//       }
-
-//       // type 2 transaction
-//       if (
-//         activeWalletConnector.supportedTxTypes.includes(2) &&
-//         activeNetwork.supportedTxTypes.includes(2)
-//       )
-//         return {
-//           maxFeePerGas: getGasValue(gasData.maxFeePerGas),
-//           maxPriorityFeePerGas: getGasValue(gasData.maxPriorityFeePerGas),
-//           type: 2,
-//         }
-
-//       // legacy type 0 transaction
-//       return {
-//         gasPrice: getGasValue(gasValue),
-//       }
-//     },
-//     [activeNetwork, connector, gasData]
-//   )
-
-//   const getAutoGasConfig = useCallback(
-//     (): GasConfiguration => getGasConfig(undefined),
-//     [getGasConfig]
-//   )
-
-//   const gasConfig = useMemo(() => getAutoGasConfig(), [getAutoGasConfig])
-
-//   return { gasConfig, getGasConfig, getAutoGasConfig }
-// }
+  return { gasConfig, isError, isLoading }
+}

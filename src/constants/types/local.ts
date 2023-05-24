@@ -28,5 +28,4 @@ export type RouteInfo = {
   name: string
   title: string
   to: string
-  children?: string[]
 }
