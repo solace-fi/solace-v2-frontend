@@ -126,7 +126,8 @@ export function StyledTooltip({
                     </Tdiv>
                     <br />
                     <Tdiv inquiry textAlign="center" mt={1} bold>
-                      Learn more <StyledLinkExternal size={20} />
+                      Learn more {/* <StyledLinkExternal size={20} /> */}
+                      <StyledLinkExternal className="h-5" />
                     </Tdiv>
                   </HyperLink>
                 </CustomTooltip>

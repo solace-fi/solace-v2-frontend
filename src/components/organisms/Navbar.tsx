@@ -73,7 +73,8 @@ export function MobileNavPanel(
               style={{ minWidth: '0', minHeight: '0' }}
               p={10}
             >
-              <StyledSun size={30} />
+              {/* <StyledSun size={30} /> */}
+              <StyledSun className="h-[30px]" />
             </Button>
             <VerticalSeparator />
             <Button
@@ -84,7 +85,8 @@ export function MobileNavPanel(
               style={{ minWidth: '0', minHeight: '0' }}
               p={10}
             >
-              <StyledMoon size={30} />
+              {/* <StyledMoon size={30} /> */}
+              <StyledMoon className="h-[30px]" />
             </Button>
           </Flex>
         </Flex>
@@ -110,7 +112,8 @@ export function MobileNavbar(
       <Flex between pr={20}>
         <Button transparent nohover onClick={() => setShow(!show)}>
           <Tdiv primary>
-            <StyledMenu size={40} />
+            {/* <StyledMenu size={40} /> */}
+            <StyledMenu className="h-10" />
           </Tdiv>
         </Button>
         <CustomConnectModule />

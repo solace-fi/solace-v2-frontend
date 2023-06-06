@@ -42,11 +42,13 @@ export const CopyButton: React.FC<CopyProps & ButtonProps & GeneralProps> = (
     <Button onClick={() => setCopied(props.toCopy)} {...props}>
       {isCopied ? (
         <Tdiv primary>
-          <StyledCheckmark size={20} style={{ margin: 'inherit' }} />
+          {/* <StyledCheckmark size={20} style={{ margin: 'inherit' }} /> */}
+          <StyledCheckmark className="h-5" style={{ margin: 'inherit' }} />
         </Tdiv>
       ) : (
         <Tdiv primary>
-          <StyledCopy size={20} />
+          {/* <StyledCopy size={20} /> */}
+          <StyledCopy className="h-5" />
           {props.objectName && `Copy ${props.objectName}`}
         </Tdiv>
       )}

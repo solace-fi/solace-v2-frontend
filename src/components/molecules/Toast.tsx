@@ -159,11 +159,14 @@ export const TransactionToast: React.FC<TransactionToastProps> = ({
             >
               {isCopied ? (
                 <Tdiv darkPrimary>
-                  <StyledCheckmark size={20} style={{ margin: 'inherit' }} />
+                  <StyledCheckmark
+                    className="h-5"
+                    style={{ margin: 'inherit' }}
+                  />
                 </Tdiv>
               ) : (
                 <Tdiv darkPrimary>
-                  <StyledCopy size={20} />
+                  <StyledCopy className="h-5" />
                   Copy Error
                 </Tdiv>
               )}

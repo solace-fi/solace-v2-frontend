@@ -10,7 +10,7 @@ import { Flex } from '../atoms/Flex'
 import { Tdiv } from '../atoms/Text'
 import { TokenInfo } from '../../constants/types'
 import { truncateValue } from '../../utils/formatting'
-import { StyledArrowDropDown } from '../atoms/Icon'
+// import { StyledArrowDropDown } from '../atoms/Icon'
 import { Card } from '../atoms/Card'
 import { useWindowDimensions } from '../../hooks/internal/useWindowDimensions'
 import { useAppSelector } from '@/store/_hooks'
@@ -154,7 +154,11 @@ export const GenericInputSection = ({
                 {frontButtonText ?? ''}
               </Tdiv>
               {hasArrow ? (
-                <StyledArrowDropDown style={arrowStyle} size={18} />
+                // <StyledArrowDropDown style={arrowStyle} size={18} />
+                // icon arrow is bad, let's just make it unicode
+                <Tdiv lightPrimary t4 {...gradientStyle}>
+                  ▼
+                </Tdiv>
               ) : null}
             </Flex>
           </Button>

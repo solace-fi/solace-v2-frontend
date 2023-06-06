@@ -2,7 +2,9 @@ import { opacify } from '../utils'
 
 export const colors = {
   white: '#FFFFFF',
+  white50: '#FAFAFA',
   black: '#000000',
+  graydark: '#323942',
   gray50: '#F5F6FC',
   gray100: '#E8ECFB',
   gray150: '#D2D9EE',
@@ -103,7 +105,7 @@ export const colors = {
 
 const sharedTheme = {
   white: colors.white,
-  gray: colors.gray500,
+  gray: colors.graydark,
   black: colors.black,
 }
 
@@ -161,7 +163,8 @@ export const darkTheme = {
   backgroundOutline: colors.gray850,
 
   textPrimary: colors.gray50,
-  textSecondary: opacify(72, colors.gray50),
+  // textSecondary: opacify(72, colors.gray50),
+  textSecondary: '#CFCFCF',
   textTertiary: colors.gray500,
 
   accentAction: colors.blue400,

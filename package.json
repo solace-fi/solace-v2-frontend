@@ -13,19 +13,6 @@
     "@rebass/forms": "^4.0.6",
     "@reduxjs/toolkit": "^1.9.3",
     "@rooks/use-debounce": "^4.11.2",
-    "@styled-icons/boxicons-logos": "^10.47.0",
-    "@styled-icons/boxicons-regular": "^10.47.0",
-    "@styled-icons/boxicons-solid": "^10.47.0",
-    "@styled-icons/evaicons-outline": "^10.46.0",
-    "@styled-icons/evaicons-solid": "^10.46.0",
-    "@styled-icons/fluentui-system-filled": "^10.47.0",
-    "@styled-icons/fluentui-system-regular": "^10.47.0",
-    "@styled-icons/ionicons-sharp": "^10.46.0",
-    "@styled-icons/material": "^10.47.0",
-    "@styled-icons/material-outlined": "^10.47.0",
-    "@styled-icons/material-rounded": "^10.47.0",
-    "@styled-icons/simple-icons": "^10.46.0",
-    "@styled-icons/typicons": "^10.46.0",
     "@types/node": "18.14.6",
     "@types/react": "18.0.28",
     "@types/react-calendar": "^3.9.0",
@@ -50,6 +37,9 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
-    "babel-plugin-styled-components": "^2.1.1"
+    "autoprefixer": "^10.4.14",
+    "babel-plugin-styled-components": "^2.1.1",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2"
   }
 }
