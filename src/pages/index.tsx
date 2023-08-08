@@ -513,13 +513,13 @@ export default function Home(): JSX.Element {
             <Button onClick={() => setOpenDates(!openDates)}>
               Open Calendar
             </Button>
-            <CalendarModal
+            {/* <CalendarModal
               modalTitle={'Select Date'}
               handleClose={() => setOpenDates(false)}
               isOpen={openDates}
               selectedDate={date}
               setSelectedDate={setDate}
-            />
+            /> */}
           </Flex>
         </Flex>
       </Flex>

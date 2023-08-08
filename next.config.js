@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // images: {
+  //   domains: ['assets.solace.fi'],
+  //   path: 'https://assets.solace.fi/',
+  //   loader: 'akamai',
+  // },
   images: {
-    domains: ['assets.solace.fi'],
-    path: 'https://assets.solace.fi/',
-    loader: 'imgix',
+    unoptimized: true,
   },
   reactStrictMode: true,
   webpack: (config) => {
