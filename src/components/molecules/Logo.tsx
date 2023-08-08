@@ -17,6 +17,7 @@ import React from 'react'
 /* import components */
 import { LogoBase } from '../atoms/Logo'
 import { GeneralProps } from '../general'
+import Image from 'next/image'
 
 interface LogoProps {
   location: any
@@ -30,7 +31,7 @@ export const Logo: React.FC<GeneralProps & LogoProps> = ({ ...props }) => {
   *************************************************************************************/
   return (
     <LogoBase {...props}>
-      <img src={''} alt="Logo" />
+      <Image src={''} alt="Logo" />
     </LogoBase>
   )
 }
@@ -45,7 +46,7 @@ export const MiniLogo: React.FC<
   *************************************************************************************/
   return (
     <LogoBase {...props} width={40}>
-      <img src={''} alt="Logo" />
+      <Image src={''} alt="Logo" />
     </LogoBase>
   )
 }

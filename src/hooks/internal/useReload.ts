@@ -11,5 +11,5 @@ export function useReload(): ReloadHook {
     setVersion((prevState) => prevState + 1)
   }, 400)
 
-  return React.useMemo(() => [reload as ReloadFn, version], [version])
+  return React.useMemo(() => [reload as ReloadFn, version], [version, reload])
 }

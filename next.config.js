@@ -2,11 +2,17 @@
 const nextConfig = {
   images: {
     domains: ['assets.solace.fi'],
+    path: 'https://assets.solace.fi/',
+    loader: 'imgix',
   },
   reactStrictMode: true,
   webpack: (config) => {
     config.resolve.fallback = { fs: false, net: false, tls: false }
     return config
+  },
+  output: 'export',
+  compiler: {
+    styledComponents: true,
   },
 }
 

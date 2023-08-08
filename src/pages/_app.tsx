@@ -45,6 +45,7 @@ import {
 import makeBlockie from 'ethereum-blockies-base64'
 import { UserImage } from '@/components/molecules/UserImage'
 import { CustomAvatar } from '@/components/molecules/CustomAvatar'
+import Image from 'next/image'
 
 const routeInfoArr: RouteInfo[] = [
   {
@@ -138,7 +139,7 @@ function DarkModeProvider({ children }: { children: ReactNode }) {
     return () => {
       clearTimeout(app)
     }
-  }, [])
+  }, [dispatch])
 
   return <>{children}</>
 }
@@ -160,7 +161,7 @@ function StyledThemeProvider({ children }: { children: ReactNode }) {
           style={{ height: '100vh', width: '100%', backgroundColor: '#000' }}
         >
           <div style={{ width: '200px', height: '200px' }}>
-            <img
+            <Image
               src="/assets/svg/colored_spinner.svg"
               alt={'loading'}
               width={200}

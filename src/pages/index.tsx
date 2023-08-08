@@ -19,12 +19,17 @@ import { Tdiv } from '@/components/atoms/Text'
 import { CheckboxOption } from '@/components/molecules/CheckboxOption'
 import { SmallerInputSection } from '@/components/atoms/Input'
 import { StyledTooltip } from '@/components/molecules/Tooltip'
-import { CalendarModal } from '@/components/organisms/CalendarModal'
+import { CalendarModal } from '@/components/organisms/Calendar.tsx/CalendarModal'
 import {
   BalanceDropdownOptions,
   GenericInputSection,
 } from '@/components/molecules/Dropdown'
-import { Z_TABLE } from '../constants'
+import {
+  ALCHEMY_ETHEREUM_API_KEY,
+  ALCHEMY_GOERLI_API_KEY,
+  ALCHEMY_POLYGON_API_KEY,
+  Z_TABLE,
+} from '../constants'
 import { TransactionCondition } from '../constants/enums'
 import { ReadToken } from '../constants/types'
 import { variants } from '../styles/animation-styles'
@@ -347,6 +352,10 @@ export default function Home(): JSX.Element {
               inquiry
               onClick={() => setOpenAccordion(!openAccordion)}
             >
+              {`${process.env.NEXT_PUBLIC_ALCHEMY_ETHEREUM_API_KEY},
+              ${ALCHEMY_ETHEREUM_API_KEY},
+                  ${ALCHEMY_GOERLI_API_KEY},
+                  ${ALCHEMY_POLYGON_API_KEY}`}
               Test Accordion
             </Button>
             <Accordion isOpen={openAccordion} customHeight={'30vh'}>

@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 function Asset({
   name,
   chain,
@@ -9,15 +11,15 @@ function Asset({
 }) {
   return (
     <div>
-      {/* <img src={logo} alt={`${name} logo`} />
+      {/* <Image src={logo} alt={`${name} logo`} />
 			<span>{name}</span>
 			<span>{chain}</span> */}
       {/* using tailwind, put the logo on the left, and to the right, a unit of name on top and chain on bottom */}
       <div className="flex">
         <div className="h-9 relative">
-          <img src={logo} alt={`${name} logo`} className="h-full" />
+          <Image src={logo} alt={`${name} logo`} className="h-full" />
           {/* let's add a little badge that goes on top of the logo at the bottom right corner. it's round and it's an image */}
-          <img
+          <Image
             src="https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png?1547042389"
             alt="badge"
             className="absolute bottom-0 right-0 h-3 z-10"

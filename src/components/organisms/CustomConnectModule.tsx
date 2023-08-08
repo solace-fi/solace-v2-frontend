@@ -7,6 +7,7 @@ import { shortenAddress } from '@/utils'
 import { useEffect, useState } from 'react'
 import { useEnsName } from 'wagmi'
 import { CustomAvatar } from '../molecules/CustomAvatar'
+import Image from 'next/image'
 
 export const CustomConnectModule = () => {
   const [scrollPosition, setScrollPosition] = useState(0)
@@ -64,12 +65,12 @@ export const CustomConnectModule = () => {
                     onClick={openChainModal}
                   >
                     <Flex>
-                      <img
-                        src={chain.iconUrl}
+                      <Image
+                        src={chain.iconUrl ?? ''}
                         width={20}
                         height={20}
                         style={{ marginRight: '2px' }}
-                        alt={chain.name}
+                        alt={chain.name ?? ''}
                       />
                       <Tdiv nowrap autoAlignVertical>
                         {chain.name}
