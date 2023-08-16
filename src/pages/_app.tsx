@@ -51,18 +51,23 @@ const routeInfoArr: RouteInfo[] = [
   {
     name: 'Playground',
     title: 'Playground',
-    to: 'playground',
+    to: '/',
   },
   {
-    name: 'Risk Market',
-    title: 'Risk Market',
-    to: '',
+    name: 'veSGT',
+    title: 'veSGT',
+    to: '/new/vesgt',
     // children: ['/pool'],
   },
   {
-    name: 'Dashboard',
-    title: 'Dashboard',
-    to: 'dashboard',
+    name: 'Rewards',
+    title: 'Rewards',
+    to: '/new/rewards',
+  },
+  {
+    name: 'Stake',
+    title: 'Stake',
+    to: '#',
   },
 ]
 
