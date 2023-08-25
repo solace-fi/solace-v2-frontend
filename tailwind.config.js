@@ -124,7 +124,7 @@ function opacify(amount, hexColor) {
 
 const sharedTheme = {
   white: colors.white,
-  gray: colors.gray500,
+  gray: '#8D8F92',
   black: colors.black,
 }
 
@@ -142,15 +142,15 @@ module.exports = {
     colors: {
       ...sharedTheme,
       background: '#20242A',
-      backgroundSurface: '#3C434E',
+      backgroundSurface: '#25292F',
       backgroundBackdrop: '#333942',
-      backgroundInteractive: '#454D59',
+      backgroundInteractive: '#323942',
       backgroundScrim: opacify(72, colors.gray900),
       backgroundOutline: colors.gray850,
 
       textPrimary: colors.white50,
       textSecondary: opacify(72, colors.gray50),
-      textTertiary: colors.gray500,
+      textTertiary: '#8D8F92',
 
       accent: '#F2CB44',
       contrastWithAccent: '#3c3c3c',
