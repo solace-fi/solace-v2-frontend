@@ -152,6 +152,10 @@ module.exports = {
       textSecondary: opacify(72, colors.gray50),
       textTertiary: colors.gray500,
 
+      accent: '#F2CB44',
+      contrastWithAccent: '#3c3c3c',
+      secondary: '#b9babc',
+
       accentAction: colors.blue400,
       accentActive: colors.blue400,
       accentSuccess: colors.green300,

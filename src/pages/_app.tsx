@@ -61,11 +61,6 @@ import Image from 'next/image'
 
 const routeInfoArr: RouteInfo[] = [
   {
-    name: 'Playground',
-    title: 'Playground',
-    to: '',
-  },
-  {
     name: 'veSGT',
     title: 'veSGT',
     to: 'new/vesgt',
@@ -80,6 +75,11 @@ const routeInfoArr: RouteInfo[] = [
     name: 'Stake',
     title: 'Stake',
     to: '#',
+  },
+  {
+    name: 'Playground',
+    title: 'Playground',
+    to: '',
   },
 ]
 
