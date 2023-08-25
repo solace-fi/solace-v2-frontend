@@ -108,8 +108,8 @@ export const GenericInputSection = ({
     onClickFront != undefined
 
   useEffect(() => {
-    setInputStyle({
-      ...inputStyle,
+    setInputStyle((_inputStyle) => ({
+      ..._inputStyle,
       width: inputWidth ?? '100%',
       borderTopLeftRadius: inputOnMobile
         ? '4px'
@@ -123,8 +123,8 @@ export const GenericInputSection = ({
         : 'inherit',
       borderTopRightRadius: onClickBack ? '0px' : 'inherit',
       borderBottomRightRadius: onClickBack ? '0px' : 'inherit',
-    })
-  }, [inputOnMobile, canClickFront, onClickBack, inputStyle, inputWidth])
+    }))
+  }, [inputOnMobile, canClickFront, onClickBack, inputWidth])
 
   const arrowStyle = {
     transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',

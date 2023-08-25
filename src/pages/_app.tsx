@@ -38,10 +38,22 @@ import { Flex } from '@/components/atoms/Flex'
 import '@rainbow-me/rainbowkit/styles.css'
 import {
   AvatarComponent,
+  connectorsForWallets,
   getDefaultWallets,
   RainbowKitProvider,
   darkTheme as raindowDarkTheme,
+  WalletList,
 } from '@rainbow-me/rainbowkit'
+import {
+  braveWallet,
+  coinbaseWallet,
+  injectedWallet,
+  metaMaskWallet,
+  rainbowWallet,
+  safeWallet,
+  trustWallet,
+  walletConnectWallet,
+} from '@rainbow-me/rainbowkit/wallets'
 import makeBlockie from 'ethereum-blockies-base64'
 import { UserImage } from '@/components/molecules/UserImage'
 import { CustomAvatar } from '@/components/molecules/CustomAvatar'
@@ -51,18 +63,18 @@ const routeInfoArr: RouteInfo[] = [
   {
     name: 'Playground',
     title: 'Playground',
-    to: '/',
+    to: '',
   },
   {
     name: 'veSGT',
     title: 'veSGT',
-    to: '/new/vesgt',
+    to: 'new/vesgt',
     // children: ['/pool'],
   },
   {
     name: 'Rewards',
     title: 'Rewards',
-    to: '/new/rewards',
+    to: 'new/rewards',
   },
   {
     name: 'Stake',
@@ -96,11 +108,28 @@ export default function App({ Component, pageProps }: AppProps) {
     ]
   )
 
-  const { connectors } = getDefaultWallets({
-    appName: 'Solace',
-    projectId: 'SOLACE_V2',
-    chains,
-  })
+  // const defaultWallets = getDefaultWallets({
+  //   appName: 'Solace',
+  //   projectId: 'SOLACE_V2',
+  //   chains,
+  // })
+  const appName = 'Solace'
+  const projectId = 'SOLACE_V2'
+  const wallets: WalletList = [
+    {
+      groupName: 'Popular',
+      wallets: [
+        injectedWallet({ chains }),
+        // safeWallet({ chains }),
+        // rainbowWallet({ chains, projectId }),
+        // coinbaseWallet({ appName, chains }),
+        // metaMaskWallet({ chains, projectId }),
+        // braveWallet({ chains }),
+        // trustWallet({ chains, projectId }),
+      ],
+    },
+  ]
+  const connectors = connectorsForWallets(wallets)
 
   const wagmiConfig = createConfig({
     autoConnect: true,
