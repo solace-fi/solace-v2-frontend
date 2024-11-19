@@ -11,7 +11,7 @@ import { VerticalSeparator } from '../atoms/Break'
 import { useWindowDimensions } from '../../hooks/internal/useWindowDimensions'
 import { CloseButton } from '../molecules/Modal'
 import { Card } from '../atoms/Card'
-import { useAppSelector } from '@/store/_hooks'
+import { useAppDispatch, useAppSelector } from '@/store/_hooks'
 import { toggleDarkTheme } from '@/store/general/generalSlice'
 import { StyledNavLink } from '../atoms/Link'
 import { useRouter } from 'next/router'
@@ -26,6 +26,7 @@ export function MobileNavPanel(
 ): JSX.Element {
   const appTheme = useAppSelector((state) => state.general.appTheme)
   const router = useRouter()
+  const dispatch = useAppDispatch()
 
   const { isMobile } = useWindowDimensions()
 
@@ -57,7 +58,9 @@ export function MobileNavPanel(
             <Button
               nohover
               onClick={() =>
-                appTheme == 'dark' ? toggleDarkTheme(false) : undefined
+                appTheme == 'dark'
+                  ? dispatch(toggleDarkTheme(false))
+                  : undefined
               }
               style={{ minWidth: '0', minHeight: '0' }}
               p={10}
@@ -68,7 +71,9 @@ export function MobileNavPanel(
             <Button
               nohover
               onClick={() =>
-                appTheme == 'light' ? toggleDarkTheme(true) : undefined
+                appTheme == 'light'
+                  ? dispatch(toggleDarkTheme(true))
+                  : undefined
               }
               style={{ minWidth: '0', minHeight: '0' }}
               p={10}
